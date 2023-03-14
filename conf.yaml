@@ -1,0 +1,32 @@
+mass:
+  filename: Output1/my_output.root
+  var: MCParticles.mass
+  plot: hist
+  reference: Output2/my_output.root
+
+mass_squared:
+  filename: Output1/my_output.root
+  var: MCParticles.mass
+  plot: hist
+  function: 'lambda x: x**2' # Arbitrary functions applied on the data are allowed
+
+# Templates can be used in the template field and it's as if their
+# parameters were inserted (non-templated fields have precedence)
+# Multiple templates are allowed, with fields from the last templates in
+# the list having precedence over earlier templates
+template_square:
+  filename: Output1/my_output.root
+  function: 'lambda x: x**2'
+  plot: hist
+
+mass_squared_template:
+  template: template_square # Same as inserting all the fields from the template
+  var: MCParticles.mass
+
+momentum_sq:
+  filename: Output1/my_output.root
+  var: [MCParticles.momentum.x, MCParticles.momentum.y, MCParticles.momentum.z]
+  function: 'lambda x, y, z: np.sqrt(x**2 + y**2 + z**2)'
+  plot: hist
+  xlabel: '$\sqrt{p_x^2+p_y^2+p_z^2}$'
+  ylabel: Entries
