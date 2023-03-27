@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import yaml
 import os
 
+from matplotlib_utils import add_table
+
 # Load the implementations of the utility functions
 # ROOT.gSystem.Load('libedm4hepRDF.so')
 # Load the declarations of the utility functions to make them available for JIT
@@ -34,6 +36,30 @@ def mean(dist):
 
 def do_nothing(x):
     return x
+
+
+class Reader:
+    def __init__(self, conf):
+
+        self.filenames = set()
+
+        for key, val in conf.items():
+            if 'filename' in val:
+                self.filenames.add(val['filename'])
+            if 'reference' in val:
+                self.filenames.add(val['reference'])
+        print(f'List of files that will be read {self.filenames}')
+
+    def check_filenames(self):
+        for filename in self.filenames:
+            if not os.path.exists(filename):
+                raise FileNotFoundError
+
+    def get_rdfs(self):
+        ls = {}
+        for filename in self.filenames:
+            ls[filename] = ROOT.RDataFrame('events', filename)
+        return ls
 
 
 class Validator:
@@ -107,38 +133,26 @@ class Validator:
             if 'plot' in self.conf[name]:
                 fig, ax = plt.subplots(1, 1, figsize=(3.72, 2.3))
                 if self.conf[name]['plot'] == 'hist':
-                    print(len(data))
-                    ax.hist(func(*data.values()), bins=100, histtype='step')
+                    to_plot = func(*data.values())
+                    ax.hist(to_plot, bins=100, histtype='step', density=True)
+                    left = ['Mean', 'Std. Dev', 'Entries']
+                    right = f'{to_plot.mean():.2f} {to_plot.std():.2f} {len(to_plot)}'
+                    add_table(left, right, ax, [.45, .5, .25, .3], title='New')
                     if data_ref:
-                        ax.hist(func(*data_ref.values()), bins=100, histtype='step')
+                        to_plot = func(*data_ref.values())
+                        ax.hist(to_plot, bins=100, histtype='step', density=True)
+                        right = f'{to_plot.mean():.2f} {to_plot.std():.2f} {len(to_plot)}'
+                        add_table(left, right, ax, [.70, .5, .25, .3], title='Ref')
                     if 'xlabel' in self.conf[name]:
                         ax.set_xlabel(self.conf[name]['xlabel'])
                     if 'ylabel' in self.conf[name]:
                         ax.set_ylabel(self.conf[name]['ylabel'])
+                    if 'xlim' in self.conf[name]:
+                        ax.set_xlim(self.conf[name]['xlim'])
+                    if 'ylim' in self.conf[name]:
+                        ax.set_ylim(self.conf[name]['ylim'])
+
                     fig.savefig(name)
 
-
-class Reader:
-    def __init__(self, conf):
-
-        self.filenames = set()
-
-        for key, val in conf.items():
-            if 'filename' in val:
-                self.filenames.add(val['filename'])
-            if 'reference' in val:
-                self.filenames.add(val['reference'])
-        print(f'List of files that will be read {self.filenames}')
-
-    def check_filenames(self):
-        for filename in self.filenames:
-            if not os.path.exists(filename):
-                raise FileNotFoundError
-
-    def get_rdfs(self):
-        ls = {}
-        for filename in self.filenames:
-            ls[filename] = ROOT.RDataFrame('events', filename)
-        return ls
 
 Validator(conf).run_validation()

@@ -4,6 +4,14 @@ mass:
   plot: hist
   reference: Output2/my_output.root
 
+momentum_x:
+  filename: Output1/my_output.root
+  var: MCParticles.momentum.x
+  plot: hist
+  reference: Output2/my_output.root
+  xlim: [-10, 14]
+  filter: 'MCParticles.momentum.y > 3'
+
 mass_squared:
   filename: Output1/my_output.root
   var: MCParticles.mass
