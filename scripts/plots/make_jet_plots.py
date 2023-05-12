@@ -5,9 +5,15 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import uproot
+import argparse
 
-upr = uproot.open('JetStudy_WW1000_11814_CLIC_o3_v14_CT_PandoraPFOs_testnew.root')['showerData;1']
-ref = uproot.open('JetStudy_WW1000_11814_CLIC_o3_v14_CT_PandoraPFOs_testnew.root')['showerData;1']
+parser = argparse.ArgumentParser(description='Make plots of jet variables from the jet study root file')
+parser.add_argument('root_file', help='Path to the root file')
+parser.add_argument('reference_root_file', help='Path to the reference root file')
+args = parser.parse_args()
+
+upr = uproot.open(args.root_file)['showerData;1']
+ref = uproot.open(args.reference_root_file)['showerData;1']
 arrays = [upr.arrays(upr.keys(), library='np'), ref.arrays(ref.keys(), library='np')]
 assert all(k in ref.keys() for k in upr.keys())
 
