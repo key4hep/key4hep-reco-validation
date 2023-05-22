@@ -1,7 +1,4 @@
-
-import math
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 import uproot
 import argparse
@@ -11,8 +8,8 @@ parser.add_argument('root_file', help='Path to the root file')
 parser.add_argument('reference_root_file', help='Path to the reference root file')
 args = parser.parse_args()
 
-upr = uproot.open('histo_muons_1GeV.root')
-ref = uproot.open('histo_muons_1GeV.root')
+upr = uproot.open(args.root_file)
+ref = uproot.open(args.reference_root_file)
 assert all(k in ref.keys() for k in upr.keys())
 
 i = 0
@@ -38,4 +35,4 @@ while i < len(upr.keys()):
     ax.plot(central, values_ref, 's', label='Reference')
     ax.set_xlabel(xlabel)
     ax.legend()
-    fig.savefig(f'tracking-{xlabel}.pdf')
+    fig.savefig(f'tracking-{xlabel}.png')
