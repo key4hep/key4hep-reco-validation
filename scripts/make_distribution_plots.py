@@ -144,7 +144,7 @@ class Validator:
                     if 'ylim' in self.conf[name]:
                         ax.set_ylim(self.conf[name]['ylim'])
 
-                    fig.savefig(name)
+                    fig.savefig(f'{name}.png')
 
 
 Validator(conf).run_validation()
