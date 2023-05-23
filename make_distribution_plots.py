@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import yaml
+from yaml.nodes import ScalarNode
 import os
 
 from matplotlib_utils import add_table
@@ -20,25 +21,25 @@ ROOT.EnableImplicitMT()
 
 with open('conf.yaml', 'r') as f:
     try:
-        conf = yaml.safe_load(f)
+        conf = yaml.load(f, Loader=yaml.FullLoader)
     except yaml.YAMLError as exc:
         print(exc)
         exit()
 
-
 def std(dist):
     return np.std(dist)
 
-
 def mean(dist):
     return np.mean(dist)
-
 
 def do_nothing(x):
     return x
 
 
 class Reader:
+    """
+    Class to read the files and create the RDataFrames
+    """
     def __init__(self, conf):
 
         self.filenames = set()
@@ -63,26 +64,15 @@ class Reader:
 
 
 class Validator:
+    """
+    Class to run the validation
+    """
     def __init__(self, conf):
         self.conf = conf
         self.groups = {}
 
     def check_and_parse_conf(self):
-        names = self.conf.keys()
-        for name in names:
-            if 'template' in self.conf[name]:
-                templates = self.conf[name]['template']
-                if not isinstance(templates, list):
-                    templates = [templates]
-                templates = templates[::-1]
-                for t in templates:
-                    for key in self.conf[t]:
-                        if key not in self.conf[name]:
-                            self.conf[name][key] = self.conf[t][key]
-
-        # Delete the templates
-        names = list(self.conf.keys())
-        for name in names:
+        for name in list(self.conf.keys()):
             if name.startswith('template'):
                 self.conf.pop(name)
 
@@ -93,7 +83,6 @@ class Validator:
                 print(f'Error parsing configuration, at least one of the fields {required} not found in the configuration for {key}: {values}')
 
     def run_validation(self):
-
         self.check_and_parse_conf()
 
         reader = Reader(self.conf)
@@ -112,9 +101,12 @@ class Validator:
                 varls = [varls]
             print(varls)
 
-            data = rdf.AsNumpy(varls)
-            for col in data:
-                data[col] = np.concatenate([np.asarray(x) for x in data[col]])
+            if 'filter' in self.conf[name]:
+                print('Filtering with', self.conf[name]['filter'])
+            data = rdf.AsNumpy(varls) if 'filter' not in self.conf[name] else rdf.Filter(self.conf[name]['filter']).AsNumpy(varls)
+
+            # for col in data:
+            #     data[col] = np.concatenate([np.asarray(x) for x in data[col]])
 
             data_ref = None
             if 'reference' in self.conf[name]:
