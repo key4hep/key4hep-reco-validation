@@ -66,7 +66,7 @@ def make_jet_plots(root_file, reference_root_file):
         add_table(left, right_current_labels, ax, [0.6, 0.4, 0.2, 0.2])
         right_reference_values = [dist_reference.mean(), dist_reference.std(), len(dist_reference)]
         right_reference_labels = [f'{right_reference_values[0]:.2f}', f'{right_reference_values[1]:.2f}', f'{right_reference_values[2]}']
-        add_table(left, right_reference, ax, [0.8, 0.4, 0.2, 0.2])
+        add_table(left, right_reference_labels, ax, [0.8, 0.4, 0.2, 0.2])
 
         # If the mean is more than threshold sigma away from the reference, make the plot red
         if abs(right_current_values[0] - right_reference_values[0]) > threshold*(right_reference_values[1] / np.sqrt(len(dist_reference))):
