@@ -38,6 +38,9 @@ label_map = {'recoJetE': 'Reconstructed Jet Energy',
              'd2_mcE': 'Daughter 2 MC Energy',
              }
 
+# Number of sigmas away from the mean to make the plot red
+threshold = 3
+
 
 def make_jet_plots(root_file, reference_root_file):
     upr = uproot.open(root_file)['showerData;1']
@@ -63,7 +66,8 @@ def make_jet_plots(root_file, reference_root_file):
         right_reference = [f'{dist_reference.mean():.2f}', f'{dist_reference.std():.2f}', f'{len(dist_reference)}']
         add_table(left, right_reference, ax, [0.8, 0.4, 0.2, 0.2])
 
-        if abs(right_reference[0]-right_current[1]) > right_reference:
+        # If the mean is more than threshold sigma away from the reference, make the plot red
+        if abs(right_reference[0]-right_current[0]) > threshold*(right_reference[1] / np.sqrt(len(dist_reference))):
             fig.patch.set_facecolor('red')
 
         ax.legend()
