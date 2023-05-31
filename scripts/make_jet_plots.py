@@ -61,13 +61,15 @@ def make_jet_plots(root_file, reference_root_file):
         ax.hist(dist_reference, bins=bins, histtype='step', label='Reference')
 
         left = ['Mean', 'Std. Dev.', 'Entries']
-        right_current = [f'{dist_current.mean():.2f}', f'{dist_current.std():.2f}', f'{len(dist_current)}']
-        add_table(left, right_current, ax, [0.6, 0.4, 0.2, 0.2])
-        right_reference = [f'{dist_reference.mean():.2f}', f'{dist_reference.std():.2f}', f'{len(dist_reference)}']
+        right_current_values = [dist_current.mean(), dist_current.std(), len(dist_current)]
+        right_current_labels = [f'{right_current_values[0]:.2f}', f'{right_current_values[1]:.2f}', f'{right_current_values[2]}']
+        add_table(left, right_current_labels, ax, [0.6, 0.4, 0.2, 0.2])
+        right_reference_values = [dist_reference.mean(), dist_reference.std(), len(dist_reference)]
+        right_reference_labels = [f'{right_reference_values[0]:.2f}', f'{right_reference_values[1]:.2f}', f'{right_reference_values[2]}']
         add_table(left, right_reference, ax, [0.8, 0.4, 0.2, 0.2])
 
         # If the mean is more than threshold sigma away from the reference, make the plot red
-        if abs(right_reference[0]-right_current[0]) > threshold*(right_reference[1] / np.sqrt(len(dist_reference))):
+        if abs(right_current_values[0] - right_reference_values[0]) > threshold*(right_reference_values[1] / np.sqrt(len(dist_reference))):
             fig.patch.set_facecolor('red')
 
         ax.legend()
