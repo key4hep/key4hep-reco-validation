@@ -90,10 +90,10 @@ def make_jet_plots(root_file, reference_root_file):
         ax.clear()
         fig.patch.set_facecolor('white')
 
-        if k == 'genJetE':
-            print(dist_current, dist_reference)
-            print(right_current_values, right_reference_values)
-            print(abs(right_current_values[0] - right_reference_values[0]), threshold*(right_reference_values[1] / np.sqrt(len(dist_reference))))
+        # if k == 'genJetE':
+        #     print(dist_current, dist_reference)
+        #     print(right_current_values, right_reference_values)
+        #     print(abs(right_current_values[0] - right_reference_values[0]), threshold*(right_reference_values[1] / np.sqrt(len(dist_reference))))
 
     for gen, reco in [['genJetE', 'recoJetE'], ['genJetPx', 'recoJetPx'], ['genJetPy', 'recoJetPy'], ['genJetPz', 'recoJetPz']]:
         dist_current = np.concatenate(arrays[0][gen])-np.concatenate(arrays[0][reco])
