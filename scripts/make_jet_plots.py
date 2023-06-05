@@ -97,6 +97,11 @@ def make_jet_plots(root_file, reference_root_file):
 
     for gen, reco in [['genJetE', 'recoJetE'], ['genJetPx', 'recoJetPx'], ['genJetPy', 'recoJetPy'], ['genJetPz', 'recoJetPz']]:
         dist_current = np.concatenate(arrays[0][gen])-np.concatenate(arrays[0][reco])
+        # Remove any array that doesn't have both the generated and reconstructed
+        for i in range(len(arrays[1][gen])):
+            if len(arrays[1][gen][i]) and len(arrays[1][gen][i]) != len(arrays[1][reco][i]):
+                arrays[1][gen][i] = np.array([])
+                arrays[1][reco][i] = np.array([])
         dist_reference = np.concatenate(arrays[1][gen])-np.concatenate(arrays[1][reco])
         _, bins, _ = ax.hist(dist_current, bins=20, histtype='step', label='Current', density=True)
         ax.hist(dist_reference, bins=bins, histtype='step', label='Reference', density=True)
