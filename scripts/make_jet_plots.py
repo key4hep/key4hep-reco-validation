@@ -5,38 +5,38 @@ import uproot
 import argparse
 from matplotlib_utils import add_table
 
-label_map = {'recoJetE': 'Reconstructed Jet Energy',
-             'recoJetPx': 'Reconstructed Jet $P_x$',
-             'recoJetPy': 'Reconstructed Jet $P_y$',
-             'recoJetPz': 'Reconstructed Jet $P_z$',
-             'genJetE': 'MC Jet Energy',
-             'genJetPx': 'MC Jet $P_x$',
-             'genJetPy': 'MC Jet $P_y$',
-             'genJetPz': 'MC Jet $P_z$',
-             'E_totPFO': 'Total PFO Energy',
-             'E_trueInv': 'MC Invisible Energy',
-             'E_trueVis': 'MC Visible Energy',
-             'Px_totPFO': 'Total PFO $P_x$',
-             'Py_totPFO': 'Total PFO $P_y$',
-             'Pz_totPFO': 'Total PFO $P_z$',
-             'Px_trueInv': 'MC Invisible $P_x$',
-             'Py_trueInv': 'MC Invisible $P_y$',
-             'Pz_trueInv': 'MC Invisible $P_z$',
-             'Px_trueVis': 'MC Visible $P_x$',
-             'Py_trueVis': 'MC Visible $P_y$',
-             'Pz_trueVis': 'MC Visible $P_z$',
-             'd1_mcE': 'Daughter 1 MC Energy',
-             'd2_mcE': 'Daughter 2 MC Energy',
+label_map = {'recoJetE': 'Reconstructed Jet Energy [GeV]',
+             'recoJetPx': 'Reconstructed Jet $P_x$ [GeV]',
+             'recoJetPy': 'Reconstructed Jet $P_y$ [GeV]',
+             'recoJetPz': 'Reconstructed Jet $P_z$ [GeV]',
+             'genJetE': 'MC Jet Energy [GeV]',
+             'genJetPx': 'MC Jet $P_x$ [GeV]',
+             'genJetPy': 'MC Jet $P_y$ [GeV]',
+             'genJetPz': 'MC Jet $P_z$ [GeV]',
+             'E_totPFO': 'Total PFO Energy [GeV]',
+             'E_trueInv': 'MC Invisible Energy [GeV]',
+             'E_trueVis': 'MC Visible Energy [GeV]',
+             'Px_totPFO': 'Total PFO $P_x$ [GeV]',
+             'Py_totPFO': 'Total PFO $P_y$ [GeV]',
+             'Pz_totPFO': 'Total PFO $P_z$ [GeV]',
+             'Px_trueInv': 'MC Invisible $P_x$ [GeV]',
+             'Py_trueInv': 'MC Invisible $P_y$ [GeV]',
+             'Pz_trueInv': 'MC Invisible $P_z$ [GeV]',
+             'Px_trueVis': 'MC Visible $P_x$ [GeV]',
+             'Py_trueVis': 'MC Visible $P_y$ [GeV]',
+             'Pz_trueVis': 'MC Visible $P_z$ [GeV]',
+             'd1_mcE': 'Daughter 1 MC Energy [GeV]',
+             'd2_mcE': 'Daughter 2 MC Energy [GeV]',
              'd1_mcPDGID': 'Daughter 1 MC PDGID',
              'd2_mcPDGID': 'Daughter 2 MC PDGID',
-             'd1_mcPx': 'Daughter 1 MC $P_x$',
-             'd2_mcPx': 'Daughter 2 MC $P_x$',
-             'd1_mcPy': 'Daughter 1 MC $P_y$',
-             'd2_mcPy': 'Daughter 2 MC $P_y$',
-             'd1_mcPz': 'Daughter 1 MC $P_z$',
-             'd2_mcPz': 'Daughter 2 MC $P_z$',
-             'd1_mcE': 'Daughter 1 MC Energy',
-             'd2_mcE': 'Daughter 2 MC Energy',
+             'd1_mcPx': 'Daughter 1 MC $P_x$ [GeV]',
+             'd2_mcPx': 'Daughter 2 MC $P_x$ [GeV]',
+             'd1_mcPy': 'Daughter 1 MC $P_y$ [GeV]',
+             'd2_mcPy': 'Daughter 2 MC $P_y$ [GeV]',
+             'd1_mcPz': 'Daughter 1 MC $P_z$ [GeV]',
+             'd2_mcPz': 'Daughter 2 MC $P_z$ [GeV]',
+             'd1_mcE': 'Daughter 1 MC Energy [GeV]',
+             'd2_mcE': 'Daughter 2 MC Energy [GeV]',
              }
 
 # Number of sigmas away from the mean to make the plot red
@@ -83,7 +83,7 @@ def make_jet_plots(root_file, reference_root_file):
             fig.patch.set_facecolor('red')
 
         ax.legend()
-        ax.set_ylabel('Entries')
+        ax.set_ylabel('Entries [a.u.]')
         ax.set_xlabel(label_map[k])
         ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1]*1.2)
         fig.savefig(f'jet-{k}.png')
@@ -119,7 +119,7 @@ def make_jet_plots(root_file, reference_root_file):
 
         ax.legend()
         ax.set_xlabel(f'{label_map[gen]} - {label_map[reco]}')
-        ax.set_ylabel('Entries')
+        ax.set_ylabel('Entries [a.u.]')
         ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1]*1.2)
         fig.savefig(f'jet-{gen}-{reco}.png')
         ax.clear()
