@@ -26,7 +26,9 @@ for run in to_run:
         run['function'](filenames[run['name']], os.path.join(args.reference, filenames[run['name']]))
         # Move all png files to the corresponding folder
         os.makedirs(os.path.join(args.output, run['name'], 'plots'), exist_ok=True)
-        shutil.move('*.png', os.path.join(args.output, run['name'], 'plots'))
-        
+        for f in os.listdir('.'):
+            if f.endswith('.png'):
+                shutil.move(f, os.path.join(args.output, run['name'], 'plots', f))
+
     except Exception as e:
         print('Failed to run', run['name'], e)
