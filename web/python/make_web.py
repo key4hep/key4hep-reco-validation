@@ -7,6 +7,7 @@ import jinja2
 import datetime
 from collections import defaultdict
 import base64
+import yaml
 
 class TranslationDict(defaultdict):
     def __missing__(self, key):
@@ -20,6 +21,20 @@ for k, v in {'track_validation': 'Track Validation',
              'jets': 'Jet Validation',
              'distributions': 'Distributions',}.items():
     FOLDER_NAMES[k] = v
+
+metadata = {}
+if os.path.exists('metadata.yaml'):
+    with open('metadata.yaml') as f:
+        metadata = yaml.load(f, Loader=yaml.FullLoader)
+if 'key4hep-spack' in metadata:
+    metadata['key4hep-spack'] = [metadata['key4hep-spack'], f"https://github.com/key4hep/key4hep-spack/commit/{metadata['key4hep-spack']}"]
+if 'spack' in metadata:
+    metadata['spack'] = [metadata['spack'], f"https://github.com/spack/spack/commit/{metadata['spack']}"]
+for k, v in metadata.items():
+    if isinstance(v, str) or len(v) == 1:
+        metadata[k] = [v, None]
+print(metadata)
+
 
 def get_latest_modified_date(folder_path):
     latest_modified_date = None
@@ -81,7 +96,7 @@ for folder in top_folders:
     plot_category_names = [FOLDER_NAMES[x] for x in plot_folders]
     template = env.get_template('section_index.html')
     with open(os.path.join(args.dest, folder, 'index.html'), 'w') as f:
-        f.write(template.render(plot_sections=zip(plot_folders, plot_category_names)))
+        f.write(template.render(plot_sections=zip(plot_folders, plot_category_names), table=metadata))
 
     for plot_folder in plot_folders:
         template = env.get_template('plot_index.html')

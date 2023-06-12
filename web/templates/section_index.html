@@ -27,7 +27,6 @@
       </div>
     </nav>
 
-    This is a test pagee
     <table class="table">
       <thead>
         <tr>
@@ -36,14 +35,16 @@
         </tr>
       </thead>
       <tbody>
+        {% for key, (value, link) in table.items() %}
         <tr>
-          <td>Key4hep-spack commit</td>
-          <td>commit</td>
+          <td>{{ key }}</td>
+          {% if link == None %}
+          <td>{{ value }}</td>
+          {% else %}
+          <td><a href="{{ link }}">{{ value }}</a></td>
+          {% endif %}
         </tr>
-        <tr>
-          <td>Spack commit</td>
-          <td>commit</td>
-        </tr>
+        {% endfor %}
       </tbody>
     </table>
 
