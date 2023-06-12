@@ -46,7 +46,8 @@ threshold = 3
 table_dimensions_left = [0.5, 0.7, 0.25, 0.2]
 table_dimensions_right = [0.75, 0.7, 0.25, 0.2]
 
-def make_jet_plots(root_file, reference_root_file):
+
+def main(root_file, reference_root_file):
     upr = uproot.open(root_file)['showerData;1']
     ref = uproot.open(reference_root_file)['showerData;1']
     arrays = [upr.arrays(upr.keys(), library='np'), ref.arrays(ref.keys(), library='np')]
@@ -130,4 +131,4 @@ if __name__ == '__main__':
     parser.add_argument('root_file', help='Path to the root file')
     parser.add_argument('reference_root_file', help='Path to the reference root file')
     args = parser.parse_args()
-    make_jet_plots(args.root_file, args.reference_root_file)
+    main(args.root_file, args.reference_root_file)
