@@ -1,7 +1,7 @@
 import argparse
 import importlib
 import os
-import subprocess
+import shutil
 
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('plots', nargs='+')
@@ -26,7 +26,7 @@ for run in to_run:
         run['function'](filenames[run['name']], os.path.join(args.reference, filenames[run['name']]))
         # Move all png files to the corresponding folder
         os.makedirs(os.path.join(args.output, run['name'], 'plots'), exist_ok=True)
-        subprocess.run(['mv', '*.png', os.path.join(args.output, run['name'], 'plots')], shell=True)
+        shutil.move('*.png', os.path.join(args.output, run['name'], 'plots'))
         
     except Exception as e:
         print('Failed to run', run['name'], e)
