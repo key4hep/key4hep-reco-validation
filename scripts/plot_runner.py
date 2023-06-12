@@ -23,7 +23,7 @@ for k, module in modules.items():
 
 for run in to_run:
     try:
-        run['function'](filenames[run['name']], os.path.join(args.reference, run['name']))
+        run['function'](filenames[run['name']], os.path.join(args.reference, filenames[run['name']]))
         # Move all png files to the corresponding folder
         os.makedirs(os.path.join(args.output, run['name'], 'plots'), exist_ok=True)
         subprocess.run(['mv', '*.png', os.path.join(args.output, run['name'], 'plots')])
