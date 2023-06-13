@@ -12,8 +12,10 @@ args = arg_parser.parse_args()
 to_run = []
 
 modules = {'jets': 'make_jet_plots',
+           'hists': 'make_distribution_hists',
            }
 filenames = {'jets': 'jet_study.root',
+             'hists': 'histograms.root',
              }
 
 for k, module in modules.items():
