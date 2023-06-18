@@ -3,6 +3,8 @@ import yaml
 import random
 import string
 
+random.seed(1000007)
+
 # Variable name length
 LENGTH = 5
 
