@@ -24,5 +24,6 @@ run_test() {
 }
 
 for arg in "$@"; do
+    cp $arg test.root
     run_test "$arg" ./read_frame_edm4hep
 done
