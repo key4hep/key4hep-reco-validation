@@ -22,3 +22,7 @@ run_test() {
     fi
     echo
 }
+
+for arg in "$@"; do
+    run_test "$arg" ./read_frame_edm4hep
+done
