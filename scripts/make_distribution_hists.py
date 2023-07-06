@@ -11,6 +11,7 @@ threshold = 3
 table_dimensions_left = [0.5, 0.7, 0.25, 0.2]
 table_dimensions_right = [0.75, 0.7, 0.25, 0.2]
 
+
 def main(root_file, reference_root_file):
     upr = uproot.open(root_file)
     ref = uproot.open(reference_root_file)
@@ -22,13 +23,24 @@ def main(root_file, reference_root_file):
         try:
             upr[k].classname
         except AttributeError:
+            print(f'Skipping {k}, no classname found in the current sample')
             continue
         if upr[k].classname != 'TTree':
+            print(f'Skipping {k}, not a TTree')
             continue
 
-        arrays_current = upr[k].arrays(library='np')
-        arrays_reference = ref[k].arrays(library='np')
+        try:
+            arrays_current = upr[k].arrays(library='np')
+        except AttributeError:
+            print(f'Skipping {k}, no arrays found in the current sample')
+            continue
+        try:
+            arrays_reference = ref[k].arrays(library='np')
+        except AttributeError:
+            print(f'Skipping {k}, no arrays found in the reference sample')
+            continue
         for name in arrays_current.keys():
+            print(f'{name}: {arrays_current[name].dtype}')
 
             dist_current = arrays_current[name]
             dist_reference = arrays_reference[name]
@@ -58,7 +70,7 @@ def main(root_file, reference_root_file):
             ax.set_ylabel('Entries [a.u.]')
             ax.set_xlabel(name)
             ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1]*1.2)
-            fig.savefig(f'hist-{name}.png')
+            fig.savefig(f'hist-{name}.svg')
             ax.clear()
             fig.patch.set_facecolor('white')
 
