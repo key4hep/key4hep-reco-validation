@@ -45,7 +45,7 @@ for run in to_run:
         # Move all png files to the corresponding folder
         os.makedirs(os.path.join(args.output, run['name'], 'plots'), exist_ok=True)
         for f in os.listdir('.'):
-            if f.endswith('.png') or f.endswith('.svg'):
+            if f.endswith('.svg'):
                 shutil.move(f, os.path.join(args.output, run['name'], 'plots', f))
 
     except Exception as e:
