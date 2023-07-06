@@ -87,7 +87,7 @@ def main(root_file, reference_root_file):
         ax.set_ylabel('Entries [a.u.]')
         ax.set_xlabel(label_map[k])
         ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1]*1.2)
-        fig.savefig(f'jet-{k}.png')
+        fig.savefig(f'jet-{k}.svg')
         ax.clear()
         fig.patch.set_facecolor('white')
 
@@ -122,7 +122,7 @@ def main(root_file, reference_root_file):
         ax.set_xlabel(f'{label_map[gen]} - {label_map[reco]}')
         ax.set_ylabel('Entries [a.u.]')
         ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1]*1.2)
-        fig.savefig(f'jet-{gen}-{reco}.png')
+        fig.savefig(f'jet-{gen}-{reco}.svg')
         ax.clear()
 
 
