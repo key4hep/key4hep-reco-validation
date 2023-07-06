@@ -33,4 +33,4 @@ for run in to_run:
                 shutil.move(f, os.path.join(args.output, run['name'], 'plots', f))
 
     except Exception as e:
-        print('Failed to run', run['name'], e)
+        print('Failed to run:', run['name'], e)
