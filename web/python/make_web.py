@@ -54,23 +54,15 @@ def get_latest_modified_date(folder_path):
 
 def write_plots(folder):
     # Generate a list of the PNG images in the folder
-    png_files = [filename for filename in os.listdir(os.path.join(folder, 'plots')) if filename.endswith('.png')]
-
-    # Generate a base64-encoded data URI for each image
-    image_data = {}
-    for filename in png_files:
-        with open(os.path.join(folder, 'plots', filename), 'rb') as f:
-            png_data = f.read()
-        base64_data = base64.b64encode(png_data).decode()
-        image_data[filename] = f'data:image/png;base64,{base64_data}'
+    svg_files = [os.path.join(folder, 'plots', filename) for filename in os.listdir(os.path.join(folder, 'plots')) if filename.endswith('.svg')]
 
     # Generate the HTML markup using a Jinja2 template
     template = jinja2.Template('''
-    {% for filename in png_files %}
-        <img src="{{ image_data[filename] }}" />
+    {% for filename in svg_files %}
+        <img src="{{ filename }}" />
     {% endfor %}
     ''')
-    html = template.render(png_files=png_files, image_data=image_data)
+    html = template.render(svg_files=svg_files)
 
     return html
 
