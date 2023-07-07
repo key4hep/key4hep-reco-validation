@@ -4,6 +4,21 @@ import matplotlib.pyplot as plt
 import uproot
 from matplotlib_utils import add_table
 
+label_map = {'trueP': 'True $p$ [GeV]',
+             'truePt': 'True $p_T$ [GeV]',
+             'trueTheta': 'True $\\theta$ [rad]',
+             'truePhi': 'True $\\phi$ [rad]',
+             'trueD0': 'True $d_0$ [mm]',
+             'trueZ0': 'True $z_0$ [mm]',
+
+             'recoP': 'Reconstructed $p$ [GeV]',
+             'recoPt': 'Reconstructed $p_T$ [GeV]',
+             'recoTheta': 'Reconstructed $\\theta$ [rad]',
+             'recoPhi': 'Reconstructed $\\phi$ [rad]',
+             'recoD0': 'Reconstructed $d_0$ [mm]',
+             'recoZ0': 'Reconstructed $z_0$ [mm]',
+             }
+
 # Number of sigmas away from the mean to make the plot red
 threshold = 3
 
@@ -68,11 +83,40 @@ def main(root_file, reference_root_file):
 
             ax.legend()
             ax.set_ylabel('Entries [a.u.]')
-            ax.set_xlabel(name)
+            ax.set_xlabel(label_map[name] if name in label_map else name)
             ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1]*1.2)
             fig.savefig(f'hist-{name}.svg')
             ax.clear()
             fig.patch.set_facecolor('white')
+
+
+    k = 'MyClicEfficiencyCalculator/perfTree;1'
+    for gen, reco in [['trueP', 'recoP'], ['truePt', 'recoPt'], ['trueTheta', 'recoTheta'], ['truePhi', 'recoPhi'], ['trueD0', 'recoD0'], ['trueZ0', 'recoZ0'],]:
+        dist_current = upr[k].arrays(library='np')[gen] - upr[k].arrays(library='np')[reco]
+        dist_reference = ref[k].arrays(library='np')[gen] - ref[k].arrays(library='np')[reco]
+        if dist_current.dtype == object:
+            dist_current = np.concatenate(dist_current)
+            dist_reference = np.concatenate(dist_reference)
+        _, bins, _ = ax.hist(dist_current, bins=20, histtype='step', label='Current', density=True)
+        ax.hist(dist_reference, bins=bins, histtype='step', label='Reference', density=True)
+        left = ['Mean', 'Std. Dev.', 'Entries']
+        right_current_values = [dist_current.mean(), dist_current.std(), len(dist_current)]
+        right_current_labels = [f'{right_current_values[0]:.2f}', f'{right_current_values[1]:.2f}', f'{right_current_values[2]}']
+        add_table(left, right_current_labels, ax, table_dimensions_left, title='Current')
+        right_reference_values = [dist_reference.mean(), dist_reference.std(), len(dist_reference)]
+        right_reference_labels = [f'{right_reference_values[0]:.2f}', f'{right_reference_values[1]:.2f}', f'{right_reference_values[2]}']
+        add_table(left, right_reference_labels, ax, table_dimensions_right, title='Reference')
+
+        # If the mean is more than threshold sigma away from the reference, make the plot red
+        if abs(right_current_values[0] - right_reference_values[0]) > threshold*(right_reference_values[1] / np.sqrt(len(dist_reference))):
+            fig.patch.set_facecolor('red')
+
+        ax.legend()
+        ax.set_xlabel(f'{label_map[gen]} - {label_map[reco]}')
+        ax.set_ylabel('Entries [a.u.]')
+        ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1]*1.2)
+        fig.savefig(f'hist-{gen}-{reco}.svg')
+        ax.clear()
 
 
 if __name__ == '__main__':
