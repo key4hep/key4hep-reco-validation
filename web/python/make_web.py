@@ -6,7 +6,6 @@ import argparse
 import jinja2
 import datetime
 from collections import defaultdict
-import base64
 import yaml
 
 class TranslationDict(defaultdict):
@@ -54,7 +53,8 @@ def get_latest_modified_date(folder_path):
 
 def write_plots(folder):
     # Generate a list of the PNG images in the folder
-    svg_files = [os.path.join(folder, 'plots', filename) for filename in os.listdir(os.path.join(folder, 'plots')) if filename.endswith('.svg')]
+    svg_files = [os.path.join('plots', filename) for filename in os.listdir(os.path.join(folder, 'plots')) if filename.endswith('.svg')]
+    print(svg_files)
 
     # Generate the HTML markup using a Jinja2 template
     template = jinja2.Template('''
