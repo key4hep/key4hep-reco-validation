@@ -38,7 +38,8 @@ for k, module in modules.items():
         if args.debug:
             logging.debug(f'Will run "{k}" with "{module}"')
         args.plots.remove(k)
-print(f'The following arguments were not recognized: {args.plots}')
+if args.plots:
+    print(f'The following arguments were not recognized: {args.plots}')
 
 
 for run in to_run:

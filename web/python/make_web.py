@@ -58,8 +58,7 @@ def write_plots(folder):
 
     # Generate the HTML markup using a Jinja2 template
     template = jinja2.Template('''
-    {% for filename in svg_files %}
-        <img src="{{ filename }}" />
+    {% for filename in svg_files %} <img src="{{ filename }}" class="plot-container"/>
     {% endfor %}
     ''')
     html = template.render(svg_files=svg_files)
