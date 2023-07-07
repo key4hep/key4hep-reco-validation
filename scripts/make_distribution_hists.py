@@ -1,7 +1,7 @@
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import uproot
-import argparse
 from matplotlib_utils import add_table
 
 # Number of sigmas away from the mean to make the plot red

@@ -15,9 +15,12 @@ arg_parser.add_argument('--output', required=True)
 arg_parser.add_argument('--debug', action='store_true')
 args = arg_parser.parse_args()
 
+# Mapping between arguments and which modules to run
 modules = {'jets': 'make_jet_plots',
            'hists': 'make_distribution_hists',
            }
+
+# Mapping between arguments and which files to compare
 filenames = {'jets': 'jet_study.root',
              'hists': 'histograms.root',
              }
