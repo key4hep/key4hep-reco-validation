@@ -4,7 +4,7 @@ source /cvmfs/sw.hsf.org/key4hep/setup.sh
 echo "Sourcing executed successfully"
 
 echo "Starting simulation..."
-ddsim --steeringFile CLDConfig/CLDConfig/cld_arc__steer.py \
+ddsim --steeringFile CLDConfig/CLDConfig/cld_arc_steer.py \
       --enableGun --gun.distribution cos(theta) \ 
       --gun.energy "20*GeV" --gun.particle proton \
       --numberOfEvents $NUMBER_OF_EVENTS \
