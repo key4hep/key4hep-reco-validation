@@ -8,6 +8,32 @@ import os
 from dd4hep import Detector
 import DDRec
 
+def find_directory_upwards(start_dir, target_dir_name):
+    """
+    Recursively searches upwards from the start directory for a directory with the specified name.
+
+    :param start_dir: The starting directory path.
+    :param target_dir_name: The name of the directory to search for.
+    :return: The path to the found directory or None if not found.
+    """
+    current_dir = os.path.abspath(start_dir)
+    
+    while True:
+        # Check if the target directory exists in the current directory
+        if target_dir_name in os.listdir(current_dir):
+            possible_match = os.path.join(current_dir, target_dir_name)
+            if os.path.isdir(possible_match):
+                return possible_match
+        
+        # Move up one level in the directory tree
+        parent_dir = os.path.dirname(current_dir)
+        
+        # If we have reached the root directory and haven't found the directory, return None
+        if current_dir == parent_dir:
+            return None
+        
+        current_dir = parent_dir
+
 
 def make_photon_file(args):
   
@@ -18,8 +44,9 @@ def make_photon_file(args):
   podio_reader = root_io.Reader(args.inputFile)
 
   # get detector description for cell id decoding
+  k4geo = find_directory_upwards('./', 'k4geo')
   theDetector = Detector.getInstance()
-  theDetector.fromXML(os.environ["K4GEO"]+"/FCCee/CLD/compact/CLD_o3_v01/ARC_o1_v01.xml")
+  theDetector.fromXML(k4geo+"/test/compact/ARC_standalone_o1_v01.xml")
   idposConv = DDRec.CellIDPositionConverter(theDetector)
                   
 
@@ -55,6 +82,12 @@ def make_photon_file(args):
     hist_nPh.Fill(n_ph)
     hist_theta_1stHit.Fill(theta_1stHit, n_ph)
 
+  if not args.no_norm:
+    factor = 1./hist_nPh.GetEntries()
+    hist_nPh.Scale(factor)
+    hist_theta.Scale(factor)
+    hist_theta_1stHit.Scale(factor)
+
   hist_nPh.Write()
   hist_theta.Write()
   hist_theta_1stHit.Write()
@@ -79,6 +112,8 @@ if __name__ == "__main__":
                       help='The name of the simulation file to be processed', default='ARC_sim.root')
   parser.add_argument('-o', "--outputFile", type=str, 
                       help='The name of the ROOT file where to save output histograms', default='ARC_analysis.root')
+  parser.add_argument('--no_norm', action='store_true',
+                      help='Do not normalize output histograms by number of events')
   args = parser.parse_args()
     
   ph_presence = make_photon_file(args)
