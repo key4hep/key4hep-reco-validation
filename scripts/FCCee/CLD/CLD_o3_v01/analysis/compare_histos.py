@@ -27,6 +27,8 @@ def compare_histos(inputFile, refFile, SL):
         else:
           matches[key.GetName()] = True
 
+        print(f"P-value for histo {key.GetName()}: {p_val} -->  match test {'passed' if matches[key.GetName()] else 'failed'}")
+
         break
 
   return matches
