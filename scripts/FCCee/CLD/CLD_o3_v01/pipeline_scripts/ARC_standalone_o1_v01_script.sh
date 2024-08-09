@@ -23,7 +23,7 @@ ddsim --steeringFile cld_arc_steer.py \
       --numberOfEvents $NUMBER_OF_EVENTS \
       --outputFile $WORKAREA/$GEOMETRY/$VERSION/ARC_sim.root \
       --random.enableEventSeed --random.seed 42 \
-      --part.userParticleHandler=''
+      --part.userParticleHandler='' > $WORKAREA/$GEOMETRY/$VERSION/ddsim_log.txt
 echo "Simulation ended successfully"
 cd $WORKAREA/$GEOMETRY/$VERSION
 
