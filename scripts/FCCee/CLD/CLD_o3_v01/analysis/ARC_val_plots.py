@@ -109,14 +109,26 @@ def make_plots(args):
       ax.xaxis.set_major_formatter(FuncFormatter(format_func))
 
     if len(args.referenceFile) != 0:
-      ref_histo = refFile[key]
-      ref_edges = ref_histo.axis().edges()
-      ref_values = ref_histo.values()
-      ax.hist(ref_edges[:-1], bins=ref_edges, weights=ref_values, histtype='step',
-              label='New hist', color='red')
-      ax.legend(loc='best')
-      if not histograms_match[key.split(';')[0]]:
-        fig.patch.set_facecolor('red') 
+      try:
+        ref_histo = refFile[key]
+        ref_edges = ref_histo.axis().edges()
+        ref_values = ref_histo.values()
+        ax.hist(ref_edges[:-1], bins=ref_edges, weights=ref_values, histtype='step',
+                label='Reference hist', color='red')
+        ax.legend(loc='best')
+        if not histograms_match[key.split(';')[0]]:
+          fig.patch.set_facecolor('red') 
+      except uproot.exceptions.KeyInFileError:
+          fig.patch.set_facecolor('yellow')
+          plt.text(
+            0.95, 0.05,  
+            "WARNING: Reference histogram not found",  
+            fontsize=12, 
+            color='black',  
+            ha='right',  # Horizontal alignment: right
+            va='bottom',  # Vertical alignment: bottom
+            transform=plt.gca().transAxes  # Use the Axes coordinates (relative coordinates)
+          )
 
     if not args.no_save:
       fig.savefig(output_start+f'_{histo.name}'+'.svg', bbox_inches='tight')
