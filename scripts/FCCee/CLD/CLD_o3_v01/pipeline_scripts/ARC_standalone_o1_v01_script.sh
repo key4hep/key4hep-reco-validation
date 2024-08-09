@@ -17,6 +17,7 @@ echo "SIMULATION PHASE"
 cd CLDConfig/CLDConfig
 echo "Starting simulation..."
 ddsim --steeringFile cld_arc_steer.py \
+      --compactFile ../../k4geo/test/compact/ARC_standalone_o1_v01.xml \
       --enableGun --gun.distribution "cos(theta)" \
       --gun.energy "20*GeV" --gun.particle proton \
       --numberOfEvents $NUMBER_OF_EVENTS \
