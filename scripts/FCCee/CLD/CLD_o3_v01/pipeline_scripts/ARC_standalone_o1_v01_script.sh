@@ -39,15 +39,15 @@ echo "Script executed successfully"
 
 # check if reference is needed
 if [ "$MAKE_REFERENCE_SAMPLE" == "yes" ]; then
-    mkdir -p $WORKAREA/$GEOMETRY/$VERSION/$REFERENCE_SAMPLE
-    mv ARC_res.root $WORKAREA/$GEOMETRY/$VERSION/$REFERENCE_SAMPLE/ref_$VERSION.root
+    mkdir -p $WORKAREA/$REFERENCE_SAMPLE/$GEOMETRY/$VERSION
+    mv ARC_res.root $WORKAREA/$REFERENCE_SAMPLE/$GEOMETRY/$VERSION/ref_$VERSION.root
 else
     # make plots
     echo "PLOT PHASE"
 
     echo "Starting plotting script..."
     python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/analysis/ARC_val_plots.py \
-       -f ARC_res.root -r $REFERENCE_SAMPLE/ref_$VERSION.root \
+       -f ARC_res.root -r $WORKAREA/$REFERENCE_SAMPLE/$GEOMETRY/$VERSION/ref_$VERSION.root \
        -o $WORKAREA/$PLOTAREA/$GEOMETRY/$VERSION/plots
     echo "Script executed successfully"
 
