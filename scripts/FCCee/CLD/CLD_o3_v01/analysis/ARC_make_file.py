@@ -54,9 +54,9 @@ def make_photon_file(args):
 
   hist_nPh = ROOT.TH1F("h_nPh", "Total number of photon counts per event",
                        50, 0, 250)
-  hist_theta = ROOT.TH1F("h_theta", "Number of photons counts per event vs. theta",
+  hist_theta = ROOT.TH1F("h_theta", "Average number of photons counts per event vs. theta",
                          90, 0, np.pi)
-  hist_theta_1stHit = ROOT.TH1F("h_theta_1stHit", "Number of photons counts per event vs. theta of incoming particle",
+  hist_theta_1stHit = ROOT.TH1F("h_theta_1stHit", "Average number of photons counts per event vs. theta of incoming particle",
                                 90, 0, np.pi)
   
   # loop over dataset
@@ -84,7 +84,6 @@ def make_photon_file(args):
 
   if not args.no_norm:
     factor = 1./hist_nPh.GetEntries()
-    hist_nPh.Scale(factor)
     hist_theta.Scale(factor)
     hist_theta_1stHit.Scale(factor)
 
