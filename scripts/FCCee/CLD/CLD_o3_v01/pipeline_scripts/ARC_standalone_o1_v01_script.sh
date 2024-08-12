@@ -48,7 +48,7 @@ else
     echo "Starting plotting script..."
     python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/analysis/ARC_val_plots.py \
        -f ARC_res.root -r $WORKAREA/$REFERENCE_SAMPLE/$GEOMETRY/$VERSION/ref_$VERSION.root \
-       -o $WORKAREA/$PLOTAREA/$GEOMETRY/$VERSION/plots
+       -o $WORKAREA/$PLOTAREA/$GEOMETRY/$VERSION/plots --test identical
     echo "Script executed successfully"
 
     # upload them on website
