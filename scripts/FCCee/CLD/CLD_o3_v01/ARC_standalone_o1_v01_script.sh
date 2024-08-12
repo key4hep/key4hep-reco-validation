@@ -1,8 +1,8 @@
 # setup phase
-echo "SETUP PHASE:"
+printf "\n\nSETUP PHASE:\n"
 
 echo "Sourcing key4hep..."
-source /cvmfs/sw.hsf.org/key4hep/setup.sh
+source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
 echo "Sourcing executed successfully"
 
 echo "Downloading necessary Github repos..."
@@ -12,7 +12,7 @@ echo "Download terminated - setup stage successful"
 
 
 # simulation phase
-echo "SIMULATION PHASE"
+printf "\n\nSIMULATION PHASE:\n"
 
 cd CLDConfig/CLDConfig
 echo "Starting simulation..."
@@ -29,7 +29,7 @@ cd $WORKAREA/$GEOMETRY/$VERSION
 
 
 # analyze simulation file
-echo "ANALYSIS PHASE"
+printf "\n\nANALYSIS PHASE:\n"
 
 echo "Starting analysis script..."
 python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/analysis/ARC_make_file.py \
@@ -43,7 +43,7 @@ if [ "$MAKE_REFERENCE_SAMPLE" == "yes" ]; then
     mv ARC_res.root $WORKAREA/$REFERENCE_SAMPLE/$GEOMETRY/$VERSION/ref_$VERSION.root
 else
     # make plots
-    echo "PLOT PHASE"
+    printf "\n\nPLOT PHASE:\n"
 
     echo "Starting plotting script..."
     python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/analysis/ARC_val_plots.py \
