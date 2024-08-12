@@ -77,10 +77,19 @@ def make_plots(args):
 
   # check reference
   if len(args.referenceFile) != 0:
-    refFile = uproot.open(args.referenceFile)
-    compare_module = importlib.import_module("compare_histos")
-    histograms_match = compare_module.compare_histos(args.inputFile, args.referenceFile, args.SL, args.test)
+    # import compare_histos module from scripts directory
+    current_dir = Path(__file__).resolve().parent
+    target_dir = current_dir.parents[3]
+    sys.path.insert(0, str(target_dir))
+    module_name = "compare_histos"
+    spec = importlib.util.find_spec(module_name)
+    target_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(target_module)
 
+    refFile = uproot.open(args.referenceFile)
+    histograms_match = target_module.compare_histos(args.inputFile, args.referenceFile, args.SL, args.test)
+
+    sys.path.pop(0)
 
   # Plot histograms
   for key in inputFile:
