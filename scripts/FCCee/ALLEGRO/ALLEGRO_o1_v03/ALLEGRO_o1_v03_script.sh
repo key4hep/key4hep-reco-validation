@@ -17,6 +17,7 @@ cd $WORKAREA/$GEOMETRY/$VERSION
 # analyze simulation file
 printf "\n\nANALYSIS PHASE:\n"
 
+source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
 echo "Starting analysis script..."
 python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ALLEGRO_make_file.py \
        -f ALLEGRO_sim_digi_reco.root -o ALLEGRO_res.root
