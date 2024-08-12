@@ -14,13 +14,13 @@ import os
 
 plot_params = {
 
-  "ccE" : {
+  "CaloCluster" : {
     "range" : (0, 15),
     "xlabel": 'Energy [MeV]',
     "ylabel": 'Counts / 0.15 MeV',
   },
 
-  "ctcE" : {
+  "CaloTopoCluster" : {
     "range" : (0, 10),
     "xlabel": 'Energy [MeV]',
     "ylabel": 'Counts / 0.1 MeV',
