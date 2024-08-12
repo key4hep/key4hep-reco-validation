@@ -41,9 +41,8 @@ def make_plots(args):
 
   # check reference
   if len(args.referenceFile) != 0:
-        # import compare_histos module from scripts directory
-    current_dir = Path(__file__).resolve().parent
-    target_dir = current_dir.parents[3]
+    # import compare_histos module from scripts directory
+    target_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../'))
     sys.path.insert(0, str(target_dir))
     module_name = "compare_histos"
     spec = importlib.util.find_spec(module_name)
