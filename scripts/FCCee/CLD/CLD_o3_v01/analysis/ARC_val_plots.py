@@ -79,7 +79,7 @@ def make_plots(args):
   if len(args.referenceFile) != 0:
     refFile = uproot.open(args.referenceFile)
     compare_module = importlib.import_module("compare_histos")
-    histograms_match = compare_module.compare_histos(args.inputFile, args.referenceFile, args.SL)
+    histograms_match = compare_module.compare_histos(args.inputFile, args.referenceFile, args.SL, args.test)
 
 
   # Plot histograms
@@ -155,6 +155,7 @@ if __name__ == "__main__":
   parser.add_argument("--SL", type=float, default=0.95, 
                       help='Significance level of the test to perform')
   parser.add_argument("--show",    action='store_true', help='Plot output histograms')
+  parser.add_argument("--test", type=str, help=f"Test to check compatibility of histograms. Possible options are: chi2, KS, identical")
   #parser.add_argument("--no_norm", action='store_true', help='Do not normalize output histograms by number of events')
   
   args = parser.parse_args()
