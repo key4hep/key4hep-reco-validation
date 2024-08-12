@@ -26,9 +26,9 @@ def make_file(args):
   ########## Count Photon Hits #########################
 
   hist_ccE = ROOT.TH1F("h_CaloCluster_E", "CaloCluster Energy",
-                       0, 15, 100)
+                       100, 0, 15)
   hist_ctcE = ROOT.TH1F("h_CaloTopoCluster_E", "CaloTopoCluster Energy",
-                        0, 10, 100)
+                        100, 0, 10)
   
   # loop over dataset
   for event in podio_reader.get("events"):
