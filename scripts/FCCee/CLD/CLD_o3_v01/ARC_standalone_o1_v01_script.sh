@@ -32,7 +32,7 @@ cd $WORKAREA/$GEOMETRY/$VERSION
 printf "\n\nANALYSIS PHASE:\n"
 
 echo "Starting analysis script..."
-python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/analysis/ARC_make_file.py \
+python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ARC_make_file.py \
        -f ARC_sim.root -o ARC_res.root
 echo "Script executed successfully"
 
@@ -46,7 +46,7 @@ else
     printf "\n\nPLOT PHASE:\n"
 
     echo "Starting plotting script..."
-    python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/analysis/ARC_val_plots.py \
+    python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ARC_val_plots.py \
        -f ARC_res.root -r $WORKAREA/$REFERENCE_SAMPLE/$GEOMETRY/$VERSION/ref_$VERSION.root \
        -o $WORKAREA/$PLOTAREA/$GEOMETRY/$VERSION/plots --test identical
     echo "Script executed successfully"
