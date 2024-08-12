@@ -12,7 +12,7 @@ cd FCC-config/FCCee/FullSim/ALLEGRO/ALLEGRO_o1_v03
 echo "Starting script..."
 ./ctest_sim_digi_reco.sh
 mv ALLEGRO_sim_digi_reco.root $WORKAREA/$GEOMETRY/$VERSION/
-
+cd $WORKAREA/$GEOMETRY/$VERSION
 
 # analyze simulation file
 printf "\n\nANALYSIS PHASE:\n"
