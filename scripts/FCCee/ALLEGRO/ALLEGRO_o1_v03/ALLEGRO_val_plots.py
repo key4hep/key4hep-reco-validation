@@ -14,16 +14,28 @@ import os
 
 plot_params = {
 
-  "CaloCluster" : {
+  "Cluster_E;totE" : {
     "range" : (0, 15),
     "xlabel": 'Energy [MeV]',
     "ylabel": 'Counts / 0.15 MeV',
   },
 
-  "CaloTopoCluster" : {
-    "range" : (0, 10),
-    "xlabel": 'Energy [MeV]',
-    "ylabel": 'Counts / 0.1 MeV',
+  "posX" : {
+    "range" : (-2800, 2800),
+    "xlabel": 'X [mm]',
+    "ylabel": 'Counts / 37 mm',
+  },
+
+  "posY" : {
+    "range" : (-2800, 2800),
+    "xlabel": 'Y [mm]',
+    "ylabel": 'Counts / 37 mm',
+  },
+
+  "posZ" : {
+    "range" : (-3150, 3150),
+    "xlabel": 'Z [mm]',
+    "ylabel": 'Counts / 41 mm',
   }
 
 }
@@ -62,9 +74,12 @@ def make_plots(args):
 
     param = {}
     for p in plot_params:
-      if p in key:
-        param = plot_params[p]
-        break
+      categories = p.split(";")
+      for c in categories:
+        if c in key:
+          param = plot_params[p]
+          break
+      
     if len(param) == 0:
       print(f"No plot parameters found for histogram {key}!")
       continue

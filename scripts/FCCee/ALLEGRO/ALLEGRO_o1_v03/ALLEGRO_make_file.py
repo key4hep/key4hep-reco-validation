@@ -28,7 +28,20 @@ def make_file(args):
   hist_ccE = ROOT.TH1F("h_CaloCluster_E", "CaloCluster Energy",
                        100, 0, 15)
   hist_ctcE = ROOT.TH1F("h_CaloTopoCluster_E", "CaloTopoCluster Energy",
-                        100, 0, 10)
+                        100, 0, 15)
+  hist_ecal_totE = ROOT.TH1F("h_ECalBarrelModuleThetaMergedPosition_totE",
+                             "ECalBarrelModuleThetaMergedPosition total Energy per evt",
+                             100, 0, 15)
+  hist_ecal_posX = ROOT.TH1F("h_ECalBarrelModuleThetaMergedPosition_posX",
+                             "ECalBarrelModuleThetaMergedPosition position X",
+                             150, -2770, 2770)
+  hist_ecal_posY = ROOT.TH1F("h_ECalBarrelModuleThetaMergedPosition_posY",
+                             "ECalBarrelModuleThetaMergedPosition position Y",
+                             150, -2770, 2770)
+  hist_ecal_posZ = ROOT.TH1F("h_ECalBarrelModuleThetaMergedPosition_posZ",
+                             "ECalBarrelModuleThetaMergedPosition position Z",
+                             150, -3100, 3100)
+  
   
   # loop over dataset
   for event in podio_reader.get("events"):
@@ -41,15 +54,27 @@ def make_file(args):
       energy =  calo.energy()
       hist_ctcE.Fill(energy)
 
+    energy = 0
+    for ecal in event.get("ECalBarrelModuleThetaMergedPositioned"):
+        energy += ecal.energy()
+        hist_ecal_posX.Fill(ecal.position().x)
+        hist_ecal_posY.Fill(ecal.position().y)
+        hist_ecal_posZ.Fill(ecal.position().z)
+    hist_ecal_totE.Fill(energy)
+
   n_evts = len(podio_reader.get("events"))
 
   if not args.no_norm:
     factor = 1./n_evts
-    hist_ccE.Scale(factor)
-    hist_ctcE.Scale(factor)
+    #hist_ccE.Scale(factor)
+    #hist_ctcE.Scale(factor)
 
   hist_ccE.Write()
   hist_ctcE.Write()
+  hist_ecal_totE.Write()
+  hist_ecal_posX.Write()
+  hist_ecal_posY.Write()
+  hist_ecal_posZ.Write()
   
   outputFile.Close()
 
