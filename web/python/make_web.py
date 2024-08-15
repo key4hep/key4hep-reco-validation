@@ -21,18 +21,21 @@ for k, v in {'track_validation': 'Track Validation',
              'distributions': 'Distributions',}.items():
     FOLDER_NAMES[k] = v
 
-metadata = {}
-if os.path.exists('metadata.yaml'):
-    with open('metadata.yaml') as f:
-        metadata = yaml.load(f, Loader=yaml.FullLoader)
-if 'key4hep-spack' in metadata:
-    metadata['key4hep-spack'] = [metadata['key4hep-spack'], f"https://github.com/key4hep/key4hep-spack/commit/{metadata['key4hep-spack']}"]
-if 'spack' in metadata:
-    metadata['spack'] = [metadata['spack'], f"https://github.com/spack/spack/commit/{metadata['spack']}"]
-for k, v in metadata.items():
-    if isinstance(v, str) or len(v) == 1:
-        metadata[k] = [v, None]
-print(metadata)
+def get_metadata(folder_path):
+    metadata = {}
+    file = os.path.join(folder_path, 'metadata.yaml')
+    if os.path.exists(file):
+        with open(file) as f:
+            metadata = yaml.load(f, Loader=yaml.FullLoader)
+    if 'key4hep-spack' in metadata:
+        metadata['key4hep-spack'] = [metadata['key4hep-spack'], f"https://github.com/key4hep/key4hep-spack/commit/{metadata['key4hep-spack']}"]
+    if 'spack' in metadata:
+        metadata['spack'] = [metadata['spack'], f"https://github.com/spack/spack/commit/{metadata['spack']}"]
+    for k, v in metadata.items():
+        if isinstance(v, str) or len(v) == 1:
+            metadata[k] = [v, None]
+    print(metadata)
+    return metadata
 
 
 def get_latest_modified_date(folder_path):
@@ -70,30 +73,43 @@ parser.add_argument('--dest', required=True, help='Destination directory for the
 
 args = parser.parse_args()
 
-# Top level folders, maybe different types of validation
-top_folders = [folder for folder in os.listdir(args.dest) if os.path.isdir(os.path.join(args.dest, folder))]
-top_folders.remove('static')
+# detector folders
+detector_folders = [folder for folder in os.listdir(args.dest) if os.path.isdir(os.path.join(args.dest, folder))]
+detector_folders.remove('static')
 # latest_modified_date = [get_latest_modified_date(os.path.join(args.dest, folder)) for folder in top_folders]
-latest_modified_date = [get_latest_modified_date(os.path.join(args.dest, folder)) for folder in top_folders]
+version_folders = []
+latest_modified_date = []
+for folder in detector_folders:
+    print(folder)
+    versions = [version_folder for version_folder in os.listdir(os.path.join(args.dest, folder)) if os.path.isdir(os.path.join(args.dest, folder, version_folder))]
+    version_folders.append(versions)
+    dates = [get_latest_modified_date(os.path.join(args.dest, folder, version)) for version in versions]
+    latest_modified_date.append(dates)
+version_date = [[(v, d) for v, d in zip(version, date)] for version, date in zip(version_folders, latest_modified_date)]
+
 env = jinja2.Environment(loader=jinja2.FileSystemLoader('../templates'))
 template = env.get_template('main_index.html')
 with open(os.path.join(args.dest, 'index.html'), 'w') as f:
-    f.write(template.render(folders=zip(top_folders, latest_modified_date)))
+    f.write(template.render(folders=zip(detector_folders, version_date)))
 
 # Now let's put an index.html file in each of the subdirectories and the plot folders
-for folder in top_folders:
-    print(folder)
-    plot_folders = [plot_folder for plot_folder in os.listdir(os.path.join(args.dest, folder)) if os.path.isdir(os.path.join(args.dest, folder, plot_folder))]
-    plot_category_names = [FOLDER_NAMES[x] for x in plot_folders]
-    template = env.get_template('section_index.html')
-    with open(os.path.join(args.dest, folder, 'index.html'), 'w') as f:
-        f.write(template.render(plot_sections=zip(plot_folders, plot_category_names), table=metadata))
+for i_folder, folder in enumerate(detector_folders):
+    print("Detector:", folder)
+    for version in version_folders[i_folder]:
+        print("Version:", version)
+        metadata = get_metadata(os.path.join(args.dest, folder, version))
+        subsystem_folders = [subsyst for subsyst in os.listdir(os.path.join(args.dest, folder, version)) if os.path.isdir(os.path.join(args.dest, folder, version, subsyst))]
+        plot_category_names = [FOLDER_NAMES[x] for x in subsystem_folders]
+    
+        template = env.get_template('version_index.html')
+        with open(os.path.join(args.dest, folder, version, 'index.html'), 'w') as f:
+            f.write(template.render(subsystems=zip(subsystem_folders, plot_category_names), table=metadata, version=version, detector_list=zip(detector_folders, version_folders)))
 
-    for plot_folder in plot_folders:
-        template = env.get_template('plot_index.html')
-        content = write_plots(os.path.join(args.dest, folder, plot_folder))
+        for subsystem in subsystem_folders:
+            print("Subsystem:", subsystem)
+            print("Full path:", os.path.join(args.dest, folder, version, subsystem))
+            template = env.get_template('plot_index.html')
+            content = write_plots(os.path.join(args.dest, folder, version, subsystem))
 
-        with open(os.path.join(args.dest, folder, plot_folder, 'index.html'), 'w') as f:
-            f.write(template.render(content=content))
-
-
+            with open(os.path.join(args.dest, folder, version, subsystem, 'index.html'), 'w') as f:
+                f.write(template.render(content=content, subsystems=subsystem_folders, version=version, subsystem=subsystem, detector_list=zip(detector_folders, version_folders)))
