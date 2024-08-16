@@ -1,7 +1,6 @@
 import ROOT
 import numpy as np
 import argparse
-import uproot
 
 
 def Chi2test(h1, h2, SL):
@@ -55,7 +54,7 @@ tests = {
 }
 
 
-def compare_histos(inputFile, refFile, SL, test_name):
+def compare_histos(histo1, histo2, SL, test_name):
   
   if SL < 0 or SL > 1:
     print('Please select a significance level between 0 and 1!')
@@ -63,23 +62,9 @@ def compare_histos(inputFile, refFile, SL, test_name):
   
   test = tests[test_name]
 
-  input_file = ROOT.TFile(inputFile, "READ")
-  ref_file = ROOT.TFile(refFile, "READ")
+  match = test(histo1, histo2, SL)
 
-  matches = {}
-  ref_keys = ref_file.GetListOfKeys()
-  for key in input_file.GetListOfKeys():
-    for ref_key in ref_keys:
-      if key.GetName() == ref_key.GetName() and \
-         'TH1' in key.GetClassName() and 'TH1' in ref_key.GetClassName():
-        histo1 = input_file.Get(key.GetName())
-        histo2 = ref_file.Get(key.GetName())
-        
-        matches[key.GetName()] = test(histo1, histo2, SL)
-
-        break
-
-  return matches
+  return match
 
 
 if __name__ == "__main__":
@@ -91,10 +76,18 @@ if __name__ == "__main__":
                       help='The name of the file with new histos to check', default='ARC_analysis.root')
   parser.add_argument('-r', "--referenceFile", type=str, 
                       help='The name of the file containing reference histos', default='')
+  parser.add_argument('-h', "--histo", type=str, 
+                      help='The name of the histogram to check', default='')
   parser.add_argument("--SL", type=float, default=0.95, 
                       help='Significance level of the test to perform')
   dict_keys = ', '.join(tests.keys())
   parser.add_argument("--test", type=str, choices=tests.keys(), help=f"Test to check compatibility of histograms. Possible options are: {dict_keys}")
   args = parser.parse_args()
 
-  compare_histos(args.inputFile, args.referenceFile, args.SL, args.test)
+
+  input_file = ROOT.TFile(args.inputFile, "READ")
+  ref_file = ROOT.TFile(args.refFile, "READ")
+  histo1 = input_file.Get(args.histo)
+  histo2 = ref_file.Get(args.histo)
+
+  compare_histos(histo1, histo2, args.SL, args.test)
