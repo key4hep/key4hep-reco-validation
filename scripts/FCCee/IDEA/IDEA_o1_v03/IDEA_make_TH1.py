@@ -122,7 +122,7 @@ def make_TH1_file(args):
 
   # Loop over dataset
   for event in podio_reader.get("events"):
-    
+
     ###########################################################################
     ##                                                                       ## 
     ##                 BEGIN: Drift Chamber Event Loop                       ##
@@ -131,7 +131,7 @@ def make_TH1_file(args):
 
     n_hits = 0
     for dch_hit in event.get("DCHCollection"):
-      n_hit += 1
+      n_hits += 1
     hist_dch_hits.Fill(n_hits)
 
     ###########################################################################
@@ -149,7 +149,7 @@ def make_TH1_file(args):
 
     n_hits = 0
     for vtxd_hit in event.get("VTXDCollection"):
-      n_hit += 1
+      n_hits += 1
     hist_vtxd_hits.Fill(n_hits)
 
     ###########################################################################
@@ -167,7 +167,7 @@ def make_TH1_file(args):
 
     n_hits = 0
     for vtxib_hit in event.get("VTXIBCollection"):
-      n_hit += 1
+      n_hits += 1
     hist_vtxib_hits.Fill(n_hits)
 
     ###########################################################################
@@ -185,7 +185,7 @@ def make_TH1_file(args):
 
     n_hits = 0
     for vtxob_hit in event.get("VTXOBCollection"):
-      n_hit += 1
+      n_hits += 1
     hist_vtxob_hits.Fill(n_hits)
 
     ###########################################################################
