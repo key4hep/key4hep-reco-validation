@@ -59,14 +59,11 @@ def make_TH1_file(args):
                              150, -3100, 3100)
   
   dir_list.append(dir_ECalBarrel)
-  calo_h_list = []
-  calo_h_list.append(hist_ccE)
-  calo_h_list.append(hist_ctcE)
-  calo_h_list.append(hist_ecal_totE)
-  calo_h_list.append(hist_ecal_posX)
-  calo_h_list.append(hist_ecal_posY)
-  calo_h_list.append(hist_ecal_posZ)
-  histo_list.append(calo_h_list)
+  histo_list.append([hist_ccE, 
+                     hist_ctcE,
+                     hist_ecal_totE,
+                     hist_ecal_posX,
+                     hist_ecal_posY, hist_ecal_posZ])
 
   #############################################################################
   ##                                                                         ##  
