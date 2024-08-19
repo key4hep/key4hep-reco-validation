@@ -7,7 +7,8 @@ source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
 printf "\n\nSIM-DIGI-RECO PHASE:\n"
 
 echo "Starting script..."
-source $FCCCONFIG/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/ctest_sim_digi_reco.sh
+sed '4d;s|k4run \$SCRIPT_DIR/run_digi_reco\.py|k4run \$FCCCONFIG/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/run_digi_reco.py|' $FCCCONFIG/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/ctest_sim_digi_reco.sh > new_script.sh
+source new_script.sh
 
 
 # analyze simulation file
