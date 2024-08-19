@@ -87,7 +87,7 @@ def make_plots(args):
   recursive_search(inputFile, file_struct)
 
   # check reference
-  check_ref = len(args.referenceFile) != 0
+  check_ref = Path(args.referenceFile).is_file() 
   if check_ref:
     refFile = ROOT.TFile(args.referenceFile, "READ")
     comparison_module = importlib.import_module("compare_histos")
@@ -115,8 +115,12 @@ def make_plots(args):
       
       histo = inputDir.Get(h_name)
       histo_ref = None
+      match = False
       if check_ref:
-        histo_ref = refDir.Get(h_name)
+        if refDir:
+          histo_ref = refDir.Get(h_name)
+        else:
+          histo_ref = refDir
         if histo_ref:
           match = comparison_module.compare_histos(histo, histo_ref, args.SL, args.test)
 
