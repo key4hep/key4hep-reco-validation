@@ -14,7 +14,7 @@ source $FCCCONFIG/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/ctest_sim_digi
 printf "\n\nANALYSIS PHASE:\n"
 
 echo "Starting analysis script..."
-python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ALLEGRO_make_file.py \
+python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ALLEGRO_make_TH1.py \
        -f ALLEGRO_sim_digi_reco.root -o ALLEGRO_res.root
 echo "Script executed successfully"
 
