@@ -14,7 +14,7 @@ source $FCCCONFIG/share/FCC-config/FullSim/IDEA/IDEA_o1_v03/ctest_sim_digi_reco.
 printf "\n\nANALYSIS PHASE:\n"
 
 echo "Starting analysis script..."
-python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/IDEA_make_TH1.py \
+python $WORKAREA/key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/IDEA_make_TH1.py \
        -f IDEA_sim_digi_reco.root -o IDEA_res.root
 echo "Script executed successfully"
 
@@ -28,7 +28,7 @@ else
     printf "\n\nPLOT PHASE:\n"
 
     echo "Starting plotting script..."
-    python key4hep-reco-validation/scripts/FCCee/utils/plot_histograms.py \
+    python $WORKAREA/key4hep-reco-validation/scripts/FCCee/utils/plot_histograms.py \
        -f IDEA_res.root -r $WORKAREA/$REFERENCE_SAMPLE/$GEOMETRY/$VERSION/ref_$VERSION.root \
        -o $WORKAREA/$PLOTAREA/$GEOMETRY/$VERSION --test identical
     echo "Script executed successfully"
