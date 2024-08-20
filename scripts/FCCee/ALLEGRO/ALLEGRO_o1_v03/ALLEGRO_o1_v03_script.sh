@@ -1,14 +1,13 @@
 printf "\n\nSETUP PHASE:\n"
 
-source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+[ -z "$KEY4HEP_STACK" ] && source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
 
 
 # simulation phase
 printf "\n\nSIM-DIGI-RECO PHASE:\n"
 
 echo "Starting script..."
-sed '4d;s|k4run \$SCRIPT_DIR/run_digi_reco\.py|k4run \$FCCCONFIG/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/run_digi_reco.py|' $FCCCONFIG/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/ctest_sim_digi_reco.sh > new_script.sh
-source new_script.sh
+source $FCCCONFIG/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/ctest_sim_digi_reco.sh
 
 
 # analyze simulation file
