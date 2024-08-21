@@ -4,7 +4,6 @@ printf "\n\nSETUP PHASE:\n"
 [ -z "$KEY4HEP_STACK" ] && source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
 
 echo "Downloading necessary Github repos..."
-git clone https://github.com/key4hep/CLDConfig.git
 git clone https://github.com/key4hep/k4geo.git
 echo "Download terminated - setup stage successful"
 
@@ -12,7 +11,7 @@ echo "Download terminated - setup stage successful"
 # simulation phase
 printf "\n\nSIMULATION PHASE:\n"
 
-cd CLDConfig/CLDConfig
+cd $CLDCONFIG/share/CLDConfig
 echo "Starting simulation..."
 ddsim --steeringFile cld_arc_steer.py \
       --compactFile ../../k4geo/test/compact/ARC_standalone_o1_v01.xml \
