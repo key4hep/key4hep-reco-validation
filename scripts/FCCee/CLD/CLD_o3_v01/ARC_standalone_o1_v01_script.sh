@@ -31,24 +31,9 @@ printf "\n\nANALYSIS PHASE:\n"
 
 echo "Starting analysis script..."
 python $WORKAREA/key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ARC_make_TH1.py \
-       -f ARC_sim.root -o ARC_res.root
+       -f ARC_sim.root -o results.root
 echo "Script executed successfully"
 
-
-# check if reference is needed
-if [ "$MAKE_REFERENCE_SAMPLE" == "yes" ]; then
-    mkdir -p $WORKAREA/$REFERENCE_SAMPLE/$GEOMETRY/$VERSION
-    mv ARC_res.root $WORKAREA/$REFERENCE_SAMPLE/$GEOMETRY/$VERSION/ref_$VERSION.root
-else
-    # make plots
-    printf "\n\nPLOT PHASE:\n"
-
-    echo "Starting plotting script..."
-    python $WORKAREA/key4hep-reco-validation/scripts/FCCee/utils/plot_histograms.py \
-       -f ARC_res.root -r $WORKAREA/$REFERENCE_SAMPLE/$GEOMETRY/$VERSION/ref_$VERSION.root \
-       -o $WORKAREA/$PLOTAREA/$GEOMETRY/$VERSION --test identical
-    echo "Script executed successfully"
-fi
 
 
 

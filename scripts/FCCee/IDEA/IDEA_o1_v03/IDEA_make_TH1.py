@@ -227,9 +227,9 @@ if __name__ == "__main__":
         description="Process simulation"
     )
   parser.add_argument('-f', "--inputFile",  type=str, 
-                      help='The name of the simulation file to be processed', default='ARC_sim.root')
+                      help='The name of the simulation file to be processed', default='IDEA_sim_digi_reco.root')
   parser.add_argument('-o', "--outputFile", type=str, 
-                      help='The name of the ROOT file where to save output histograms', default='ARC_analysis.root')
+                      help='The name of the ROOT file where to save output histograms', default='results.root')
   parser.add_argument('--norm', action='store_true',
                       help='Normalize output histograms by number of events')
   args = parser.parse_args()
