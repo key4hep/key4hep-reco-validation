@@ -5,6 +5,7 @@ printf "\n\nSETUP PHASE:\n"
 
 echo "Downloading necessary Github repos..."
 git clone https://github.com/key4hep/k4geo.git
+K4GEO_PATH=$(realpath k4geo)
 echo "Download terminated - setup stage successful"
 
 
@@ -14,7 +15,7 @@ printf "\n\nSIMULATION PHASE:\n"
 cd $CLDCONFIG/share/CLDConfig
 echo "Starting simulation..."
 ddsim --steeringFile cld_arc_steer.py \
-      --compactFile ../../k4geo/test/compact/ARC_standalone_o1_v01.xml \
+      --compactFile $K4GEO_PATH/test/compact/ARC_standalone_o1_v01.xml \
       --enableGun --gun.distribution "cos(theta)" \
       --gun.energy "20*GeV" --gun.particle proton \
       --numberOfEvents $NUMBER_OF_EVENTS \
