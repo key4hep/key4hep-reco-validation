@@ -1,9 +1,7 @@
 # setup phase
 printf "\n\nSETUP PHASE:\n"
 
-echo "Sourcing key4hep..."
-source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
-echo "Sourcing executed successfully"
+[ -z "$KEY4HEP_STACK" ] && source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
 
 echo "Downloading necessary Github repos..."
 git clone https://github.com/key4hep/CLDConfig.git
@@ -32,7 +30,7 @@ cd $WORKAREA/$GEOMETRY/$VERSION
 printf "\n\nANALYSIS PHASE:\n"
 
 echo "Starting analysis script..."
-python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ARC_make_file.py \
+python $WORKAREA/key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ARC_make_TH1.py \
        -f ARC_sim.root -o ARC_res.root
 echo "Script executed successfully"
 
@@ -46,15 +44,9 @@ else
     printf "\n\nPLOT PHASE:\n"
 
     echo "Starting plotting script..."
-    python key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ARC_val_plots.py \
+    python $WORKAREA/key4hep-reco-validation/scripts/FCCee/utils/plot_histograms.py \
        -f ARC_res.root -r $WORKAREA/$REFERENCE_SAMPLE/$GEOMETRY/$VERSION/ref_$VERSION.root \
-       -o $WORKAREA/$PLOTAREA/$GEOMETRY/$VERSION/plots --test identical
-    echo "Script executed successfully"
-
-    # upload them on website
-    echo "Starting website script..."
-    cd key4hep-reco-validation/web/python
-    python3 make_web.py --dest $WORKAREA/$PLOTAREA
+       -o $WORKAREA/$PLOTAREA/$GEOMETRY/$VERSION --test identical
     echo "Script executed successfully"
 fi
 
