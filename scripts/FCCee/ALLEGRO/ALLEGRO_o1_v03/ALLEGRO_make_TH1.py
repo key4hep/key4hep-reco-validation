@@ -63,7 +63,8 @@ def make_TH1_file(args):
                      hist_ctcE,
                      hist_ecal_totE,
                      hist_ecal_posX,
-                     hist_ecal_posY, hist_ecal_posZ])
+                     hist_ecal_posY,
+                     hist_ecal_posZ])
 
   #############################################################################
   ##                                                                         ##  
