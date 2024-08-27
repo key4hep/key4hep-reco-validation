@@ -40,13 +40,13 @@ def make_TH1_file(args):
   dir_ECalBarrel = outputFile.mkdir("ECalBarrel")
 
   hist_ccE = ROOT.TH1F("h_CaloCluster_E",
-                       "CaloCluster Energy;Energy [MeV];Counts / 0.15 meV",
+                       "CaloCluster Energy;Energy [MeV];Counts / 0.15 MeV",
                        100, 0, 15)
   hist_ctcE = ROOT.TH1F("h_CaloTopoCluster_E",
-                        "CaloTopoCluster Energy;Energy [MeV];Counts / 0.15 meV",
+                        "CaloTopoCluster Energy;Energy [MeV];Counts / 0.15 MeV",
                         100, 0, 15)
   hist_ecal_totE = ROOT.TH1F("h_ECalBarrelModuleThetaMergedPosition_totE",
-                             "ECalBarrelModuleThetaMergedPosition total Energy per evt;Energy [MeV];Counts / 0.15 meV",
+                             "ECalBarrelModuleThetaMergedPosition total Energy per evt;Energy [MeV];Counts / 0.15 MeV",
                              100, 0, 15)
   hist_ecal_posX = ROOT.TH1F("h_ECalBarrelModuleThetaMergedPosition_posX",
                              "ECalBarrelModuleThetaMergedPosition position X;X [mm];Counts / 37 mm",

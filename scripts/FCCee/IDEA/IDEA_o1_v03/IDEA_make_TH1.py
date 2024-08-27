@@ -39,8 +39,8 @@ def make_TH1_file(args):
   dir_DCH = outputFile.mkdir("DriftChamber")
 
   hist_dch_hits = ROOT.TH1F("h_DriftChamber_hits",
-                        "Number of hits;Hits;Counts / 0.15 meV",
-                        40, 0, 200)
+                            "Number of hits;Hits;Counts / 5 hits",
+                            40, 0, 200)
     
   dir_list.append(dir_DCH)
   histo_list.append([hist_dch_hits])
@@ -61,8 +61,8 @@ def make_TH1_file(args):
   dir_VTXD = outputFile.mkdir("VertexDetector")
 
   hist_vtxd_hits = ROOT.TH1F("h_VertexDetector_hits",
-                        "Number of hits;Hits;Counts / 0.15 meV",
-                        40, 0, 200)
+                             "Number of hits;Hits;Counts / 5 hits",
+                             40, 0, 200)
     
   dir_list.append(dir_VTXD)
   histo_list.append([hist_vtxd_hits])
@@ -83,8 +83,8 @@ def make_TH1_file(args):
   dir_VTXIB = outputFile.mkdir("VertexInnerBarrel")
 
   hist_vtxib_hits = ROOT.TH1F("h_VertexInnerBarrel_hits",
-                        "Number of hits;Hits;Counts / 0.15 meV",
-                        40, 0, 200)
+                              "Number of hits;Hits;Counts / 5 hits",
+                              40, 0, 200)
     
   dir_list.append(dir_VTXIB)
   histo_list.append([hist_vtxib_hits])
@@ -105,8 +105,8 @@ def make_TH1_file(args):
   dir_VTXOB = outputFile.mkdir("VertexOuterBarrel")
 
   hist_vtxob_hits = ROOT.TH1F("h_VertexOuterBarrel_hits",
-                        "Number of hits;Hits;Counts / 0.15 meV",
-                        40, 0, 200)
+                              "Number of hits;Hits;Counts / 5 hits",
+                              40, 0, 200)
     
   dir_list.append(dir_VTXOB)
   histo_list.append([hist_vtxob_hits])
