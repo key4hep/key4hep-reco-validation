@@ -55,7 +55,7 @@ def plot_histo(h, h_ref, match):
   if h_ref is not None:
     # if reference histo is found in the correct place
     if h_ref:
-      h_ref.SetLineCOlor(ROOT.kRed)
+      h_ref.SetLineColor(ROOT.kRed)
       h_ref.Draw("SAME")
       legend.AddEntry(h_ref, "Reference", "l")
       if not match:
