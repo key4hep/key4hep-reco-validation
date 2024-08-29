@@ -41,43 +41,63 @@ def plot_histo(h, h_ref, match):
   c1 = ROOT.TCanvas("c1", "Canvas", 800, 600)
   pad = c1.GetPad(0)
 
-  # Set different colors for each histogram
+  # Draw current histogram
   h.SetLineColor(ROOT.kBlue)
-
-  # Draw the first histogram
+  h.SetName("Current")
   h.Draw()
 
+  # update canvas to make sure the stat box is ready
+  c1.Update()
+
   # Create a legend
-  legend = ROOT.TLegend(0.7, 0.7, 0.9, 0.9) # this is the position of the legend (I usualy do trial and error to place it properly)
+  legend = ROOT.TLegend(0.755, 0.675, 0.93, 0.775) # this is the position of the legend (I usualy do trial and error to place it properly)
   legend.AddEntry(h, "Current", "l")
 
   # if check with reference value
   if h_ref is not None:
     # if reference histo is found in the correct place
     if h_ref:
+      # Draw reference histogram
       h_ref.SetLineColor(ROOT.kRed)
-      h_ref.Draw("SAME")
+      h_ref.SetLineStyle(2)
+      h_ref.SetName("Reference")
+      h_ref.Draw("SAMES")
+
+      # update canvas to make sure the stat box is ready
+      c1.Update()
+
+      # move statistics box
+      stat_box = h_ref.FindObject("stats")
+      stat_box.SetX1NDC(0.78)   # Set X1 (left)   position in NDC coordinates
+      stat_box.SetX2NDC(0.98)   # Set X2 (right)  position in NDC coordinates
+      stat_box.SetY1NDC(0.775)  # Set Y1 (bottom) position in NDC coordinates
+      stat_box.SetY2NDC(0.935)  # Set Y2 (top)    position in NDC coordinates
+
+      stat_box = h.FindObject("stats")
+      stat_box.SetX1NDC(0.58)   # Set X1 (left)   position in NDC coordinates
+      stat_box.SetX2NDC(0.78)   # Set X2 (right)  position in NDC coordinates
+      stat_box.SetY1NDC(0.775)  # Set Y1 (bottom) position in NDC coordinates
+      stat_box.SetY2NDC(0.935)  # Set Y2 (top)    position in NDC coordinates
+
+      # Add histo to legend
       legend.AddEntry(h_ref, "Reference", "l")
+
+      # change background color
       if not match:
         c1.SetFillColor(ROOT.kRed) 
-        pad.SetFillColor(0)
+
     # if reference histo is not present
     else:
         c1.SetFillColor(ROOT.kYellow) 
-        pad.SetFillColor(0)
-        # Create a TLatex object for the text
+        # Create a TLatex object for the warning text
         warning = ROOT.TLatex()
-        warning.SetNDC()  # Use Normalized Device Coordinates (0 to 1)
+        warning.SetNDC() 
         warning.SetTextSize(0.04)  # Text size
-        warning.SetTextAlign(33)   # Align bottom-right corner
-        warning.DrawLatex(0.95, 0.05, "WARNING: Reference histogram not found")
+        warning.SetTextAlign(13)   # Align bottom-left corner
+        warning.DrawLatex(0.05, 0.05, "WARNING: Reference histogram not found!")
 
-  
-  # Update the canvas to display the plots
-  legend.Draw()
-  c1.Update()
-  
-  return c1
+  c1.Update() 
+  return legend, c1
 
 
 def make_plots(args):
@@ -110,7 +130,6 @@ def make_plots(args):
       if check_ref:
         refDir = refFile
       
-
     #check output directory
     save_dir = os.path.join(args.outputPath, dir, 'plots')
     Path(save_dir).mkdir(parents=True, exist_ok=True)
@@ -129,7 +148,10 @@ def make_plots(args):
         if histo_ref:
           match = comparison_module.compare_histos(histo, histo_ref, args.SL, args.test)
 
-      c = plot_histo(histo, histo_ref, match)
+      # plot the two histograms
+      leg, c = plot_histo(histo, histo_ref, match)
+      leg.Draw()
+      c.Update()
 
       if not args.no_save:
         c.SaveAs(save_dir+f'/{h_name}'+'.svg')
