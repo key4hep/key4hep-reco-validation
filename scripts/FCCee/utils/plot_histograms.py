@@ -44,7 +44,7 @@ def plot_histo(h, h_ref, match):
   # Draw current histogram
   h.SetLineColor(ROOT.kBlue)
   h.SetName("Current")
-  h.Draw()
+  h.Draw("HIST")
 
   # update canvas to make sure the stat box is ready
   c1.Update()
@@ -61,7 +61,7 @@ def plot_histo(h, h_ref, match):
       h_ref.SetLineColor(ROOT.kRed)
       h_ref.SetLineStyle(2)
       h_ref.SetName("Reference")
-      h_ref.Draw("SAMES")
+      h_ref.Draw("HIST SAMES")
 
       # update canvas to make sure the stat box is ready
       c1.Update()
