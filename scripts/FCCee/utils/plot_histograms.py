@@ -38,47 +38,52 @@ def recursive_search(target_dir, dict):
 
 def plot_histo(h, h_ref, match):
 
-  n_bins = h.GetNbinsX()
-  bin_edges = np.array([h.GetBinLowEdge(i+1) for i in range(n_bins+1)])
-  bin_contents = np.array([h.GetBinContent(i+1) for i in range(n_bins)])
+  c1 = ROOT.TCanvas("c1", "Canvas", 800, 600)
+  pad = c1.GetPad(0)
 
-  # plot new validation hist
-  fig, ax = plt.subplots(figsize=(8,6))
-  ax.bar(bin_edges[:-1], bin_contents, width=np.diff(bin_edges), align="edge",
-         label='Current', edgecolor='orange', color='white', ecolor='orange')
-  ax.set_xlabel(h.GetXaxis().GetTitle())
-  ax.set_ylabel(h.GetYaxis().GetTitle())
-  ax.set_title(h.GetTitle())
+  # Set different colors for each histogram
+  h.SetLineColor(ROOT.kBlue)
+
+  # Draw the first histogram
+  h.Draw()
+
+  # Create a legend
+  legend = ROOT.TLegend(0.7, 0.7, 0.9, 0.9) # this is the position of the legend (I usualy do trial and error to place it properly)
+  legend.AddEntry(h, "Current", "l")
 
   # if check with reference value
   if h_ref is not None:
     # if reference histo is found in the correct place
     if h_ref:
-      n_bins = h.GetNbinsX()
-      ref_edges = np.array([h_ref.GetBinLowEdge(i+1) for i in range(n_bins+1)])
-      ref_contents = np.array([h_ref.GetBinContent(i+1) for i in range(n_bins)])
-      ax.bar(ref_edges[:-1], ref_contents, width=np.diff(ref_edges), align="edge",
-              label='Reference', edgecolor='skyblue', color='white', alpha=0.7)
-      ax.legend(loc='best')
+      h_ref.SetLineCOlor(ROOT.kRed)
+      h_ref.Draw("SAME")
+      legend.AddEntry(h_ref, "Reference", "l")
       if not match:
-        fig.patch.set_facecolor('red') 
+        c1.SetFillColor(ROOT.kRed) 
+        pad.SetFillColor(0)
     # if reference histo is not present
     else:
-        fig.patch.set_facecolor('yellow')
-        plt.text(
-          0.95, 0.05,  
-          "WARNING: Reference histogram not found",  
-          fontsize=12, 
-          color='black',  
-          ha='right',  # Horizontal alignment: right
-          va='bottom',  # Vertical alignment: bottom
-          transform=plt.gca().transAxes  # Use the Axes coordinates (relative coordinates)
-        )
+        c1.SetFillColor(ROOT.kYellow) 
+        pad.SetFillColor(0)
+        # Create a TLatex object for the text
+        warning = ROOT.TLatex()
+        warning.SetNDC()  # Use Normalized Device Coordinates (0 to 1)
+        warning.SetTextSize(0.04)  # Text size
+        warning.SetTextAlign(33)   # Align bottom-right corner
+        warning.DrawLatex(0.95, 0.05, "WARNING: Reference histogram not found")
 
-  return fig
+  
+  # Update the canvas to display the plots
+  legend.Draw()
+  c1.Update()
+  
+  return c1
 
 
 def make_plots(args):
+
+  if not args.show:
+    ROOT.gROOT.SetBatch(True)
 
   # read input file
   inputFile = ROOT.TFile(args.inputFile, "READ")
@@ -124,15 +129,10 @@ def make_plots(args):
         if histo_ref:
           match = comparison_module.compare_histos(histo, histo_ref, args.SL, args.test)
 
-      fig = plot_histo(histo, histo_ref, match)
+      c = plot_histo(histo, histo_ref, match)
 
       if not args.no_save:
-        fig.savefig(save_dir+f'/{h_name}'+'.svg', bbox_inches='tight')
-      if not args.show:
-        plt.close(fig)
-
-  if args.show:
-    plt.show()
+        c.SaveAs(save_dir+f'/{h_name}'+'.svg')
   
 
 #########################################################################
