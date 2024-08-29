@@ -69,10 +69,10 @@ def make_TH1_file(args):
                            "Total number of photon counts per event;Number of Photons;Photon count / 5",
                            50, 0, 250)
   hist_ARC_theta = ROOT.TH1F("h_ARC_theta",
-                             "Average number of photons counts per event vs. #theta;Polar angle #theta;Photon count / 35 mrad",
+                             "Photons counts vs. #theta;Polar angle #theta;Photon count / 35 mrad",
                               90, 0, np.pi)
   hist_ARC_1stHit = ROOT.TH1F("h_ARC_1stHit",
-                              "Average number of photons counts per event vs. #theta of incoming particle;Polar angle #theta;Photon count / 35 mrad",
+                              "Photons counts vs. #theta of incoming particle;Polar angle #theta;Photon count / 35 mrad",
                               90, 0, np.pi)
   
   dir_list.append(dir_ARC)
