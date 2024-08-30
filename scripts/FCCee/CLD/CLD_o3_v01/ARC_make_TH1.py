@@ -38,7 +38,7 @@ def find_directory_upwards(start_dir, target_dir_name):
 def make_TH1_file(args):
   
   # create output ROOT file
-  outputFile = ROOT.TFile(args.outputFile, "RECREATE")
+  outputFile = ROOT.TFile(args.outputFile, "UPDATE")
 
   # set file reader
   podio_reader = root_io.Reader(args.inputFile)
