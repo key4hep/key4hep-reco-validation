@@ -1,5 +1,7 @@
+set -e
+
 # setup phase
-printf "\n\nSETUP PHASE:\n"
+echo "SETUP PHASE:"
 
 [ -z "$KEY4HEP_STACK" ] && source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
 
@@ -10,7 +12,7 @@ echo "Download terminated - setup stage successful"
 
 
 # simulation phase
-printf "\n\nSIMULATION PHASE:\n"
+echo "SIMULATION PHASE:"
 
 cd $CLDCONFIG/share/CLDConfig
 echo "Starting simulation..."
@@ -27,7 +29,7 @@ cd $WORKAREA/$GEOMETRY/$VERSION
 
 
 # analyze simulation file
-printf "\n\nANALYSIS PHASE:\n"
+echo "ANALYSIS PHASE:"
 
 echo "Starting analysis script..."
 python $WORKAREA/key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ARC_make_TH1.py \
