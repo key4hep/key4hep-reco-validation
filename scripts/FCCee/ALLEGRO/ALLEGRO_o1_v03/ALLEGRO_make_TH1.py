@@ -23,10 +23,6 @@ def make_TH1_file(args):
   # set list of (list of) histograms created (one list per subsystem to check)
   histo_list = []
 
-  # get detector description for cell id decoding
-  #theDetector = Detector.getInstance()
-  #theDetector.fromXML(os.environ["$K4GEO"]+"/FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml") 
-  #idposConv = DDRec.CellIDPositionConverter(theDetector)
                   
 
 
