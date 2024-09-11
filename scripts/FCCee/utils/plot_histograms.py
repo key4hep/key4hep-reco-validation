@@ -102,7 +102,7 @@ def plot_histo(h, h_ref, match):
   return legend, c1
 
 
-def make_plots(args):
+def compare_and_plot(args):
 
   if not args.show:
     ROOT.gROOT.SetBatch(True)
@@ -137,11 +137,12 @@ def make_plots(args):
     Path(save_dir).mkdir(parents=True, exist_ok=True)
 
     # loop over all histos inside directory
+    failed_match = []
     for h_name in file_struct[dir]:
       
       histo = inputDir.Get(h_name)
       histo_ref = None
-      match = False
+      match = True
       if check_ref:
         if refDir:
           histo_ref = refDir.Get(h_name)
@@ -150,6 +151,8 @@ def make_plots(args):
         if histo_ref:
           match = comparison_module.compare_histos(histo, histo_ref, args.SL, args.test)
 
+      if not match:
+        failed_match.append(h_name)
       # plot the two histograms
       leg, c = plot_histo(histo, histo_ref, match)
       leg.Draw()
@@ -157,7 +160,13 @@ def make_plots(args):
 
       if not args.no_save:
         c.SaveAs(save_dir+f'/{h_name}'+'.svg')
-  
+    
+    if failed_match and args.mail:
+      with open(args.mail, "a") as f:
+        f.write(f"Mismatches in {dir}: ")
+        for h in failed_match[:-1]:
+          f.write(f"{h},  ")
+        f.write(f"{failed_match[-1]} \n")
 
 #########################################################################
 
@@ -171,6 +180,8 @@ if __name__ == "__main__":
                       help='The name of the directory where to save output files', default='./')
   parser.add_argument('-r', "--referenceFile", type=str, 
                       help='The name of the file containing reference histos', default='')
+  parser.add_argument('-m', '--mail', type=str, 
+                      help='The name of the file where to store the body of the email', default='')
   parser.add_argument("--no_save", action='store_true', help='Do not save output arrays')
   parser.add_argument("--show",    action='store_true', help='Plot output histograms')
   parser.add_argument("--test", type=str, help=f"Test to check compatibility of histograms. Possible options are: chi2, KS, identical")
@@ -179,6 +190,6 @@ if __name__ == "__main__":
   
   args = parser.parse_args()
     
-  make_plots(args)
+  compare_and_plot(args)
   
   
