@@ -24,14 +24,8 @@ def make_TH1_file(args):
   histo_list = []
 
                   
-
-
-
-  #############################################################################
-  ##                                                                         ## 
-  ##                BEGIN: ECal Barrel Histogram Definition                  ##
-  ##                                                                         ## 
-  #############################################################################
+ 
+  #############      BEGIN: ECal Barrel Histogram Definition      #############
 
   dir_ECalBarrel = outputFile.mkdir("ECalBarrel")
 
@@ -61,12 +55,8 @@ def make_TH1_file(args):
                      hist_ecal_posX,
                      hist_ecal_posY,
                      hist_ecal_posZ])
-
-  #############################################################################
-  ##                                                                         ##  
-  ##                  END: ECal Barrel Histogram Definition                  ##
-  ##                                                                         ## 
-  #############################################################################
+ 
+  ##############      END: ECal Barrel Histogram Definition      ##############
   
 
 
@@ -74,12 +64,7 @@ def make_TH1_file(args):
   # Loop over dataset
   for event in podio_reader.get("events"):
 
-
-    ###########################################################################
-    ##                                                                       ## 
-    ##                  BEGIN: ECal Barrel Event Loop                        ##
-    ##                                                                       ## 
-    ###########################################################################
+    ##################     BEGIN: ECal Barrel Event Loop     ##################
 
     for calo in event.get("CaloClusters"):
       hist_ccE.Fill(calo.getEnergy())
@@ -95,11 +80,7 @@ def make_TH1_file(args):
         hist_ecal_posZ.Fill(ecal.position().z)
     hist_ecal_totE.Fill(energy)
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                    END: ECal Barrel Event Loop                        ##
-    ##                                                                       ## 
-    ###########################################################################
+    ##################      END: ECal Barrel Event Loop      ##################
 
 
 

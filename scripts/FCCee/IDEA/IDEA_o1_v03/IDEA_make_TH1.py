@@ -23,18 +23,9 @@ def make_TH1_file(args):
   # set list of (list of) histograms created (one list per subsystem to check)
   histo_list = []
 
-  # get detector description for cell id decoding
-  #theDetector = Detector.getInstance()
-  #theDetector.fromXML(os.environ["$K4GEO"]+"/FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml") 
-  #idposConv = DDRec.CellIDPositionConverter(theDetector)
 
-
-
-  #############################################################################
-  ##                                                                         ## 
-  ##              BEGIN: Drift Chamber Histogram Definition                  ##
-  ##                                                                         ## 
-  #############################################################################
+ 
+  ############      BEGIN: Drift Chamber Histogram Definition      ############
 
   dir_DCH = outputFile.mkdir("DriftChamber")
 
@@ -44,19 +35,11 @@ def make_TH1_file(args):
     
   dir_list.append(dir_DCH)
   histo_list.append([hist_dch_hits])
-
-  #############################################################################
-  ##                                                                         ##  
-  ##                END: Drift Chamber Histogram Definition                  ##
-  ##                                                                         ## 
-  #############################################################################
+  
+  #############      END: Drift Chamber Histogram Definition      #############
 
 
-  #############################################################################
-  ##                                                                         ## 
-  ##             BEGIN: Vertex Detector Histogram Definition                 ##
-  ##                                                                         ## 
-  #############################################################################
+  ###########      BEGIN: Vertex Detector Histogram Definition      ###########
 
   dir_VTXD = outputFile.mkdir("VertexDetector")
 
@@ -67,18 +50,10 @@ def make_TH1_file(args):
   dir_list.append(dir_VTXD)
   histo_list.append([hist_vtxd_hits])
 
-  #############################################################################
-  ##                                                                         ##  
-  ##               END: Vertex Detector Histogram Definition                 ##
-  ##                                                                         ## 
-  #############################################################################
+  ############      END: Vertex Detector Histogram Definition      ############
 
 
-  #############################################################################
-  ##                                                                         ## 
-  ##           BEGIN: Vertex Inner Barrel Histogram Definition               ##
-  ##                                                                         ## 
-  #############################################################################
+  #########     BEGIN: Vertex Inner Barrel Histogram Definition      ##########
 
   dir_VTXIB = outputFile.mkdir("VertexInnerBarrel")
 
@@ -89,18 +64,10 @@ def make_TH1_file(args):
   dir_list.append(dir_VTXIB)
   histo_list.append([hist_vtxib_hits])
 
-  #############################################################################
-  ##                                                                         ##  
-  ##             END: Vertex Inner Barrel Histogram Definition               ##
-  ##                                                                         ## 
-  #############################################################################
+  ##########     END: Vertex Inner Barrel Histogram Definition      ###########
 
 
-  #############################################################################
-  ##                                                                         ## 
-  ##           BEGIN: Vertex Outer Barrel Histogram Definition               ##
-  ##                                                                         ## 
-  #############################################################################
+  #########     BEGIN: Vertex Outer Barrel Histogram Definition      ##########
 
   dir_VTXOB = outputFile.mkdir("VertexOuterBarrel")
 
@@ -111,18 +78,10 @@ def make_TH1_file(args):
   dir_list.append(dir_VTXOB)
   histo_list.append([hist_vtxob_hits])
 
-  #############################################################################
-  ##                                                                         ##  
-  ##             END: Vertex Outer Barrel Histogram Definition               ##
-  ##                                                                         ## 
-  #############################################################################
+  ##########     END: Vertex oUTer Barrel Histogram Definition      ###########
 
 
-  #############################################################################
-  ##                                                                         ## 
-  ##               BEGIN: Muon System Histogram Definition                   ##
-  ##                                                                         ## 
-  #############################################################################
+  #############      BEGIN: Muon System Histogram Definition      #############
 
   dir_MUS = outputFile.mkdir("MuonSystem")
 
@@ -133,18 +92,10 @@ def make_TH1_file(args):
   dir_list.append(dir_MUS)
   histo_list.append([hist_mus_hits])
 
-  #############################################################################
-  ##                                                                         ##  
-  ##                END: Muon System Histogram Definition                    ##
-  ##                                                                         ## 
-  #############################################################################
+  ##############      END: Muon System Histogram Definition      ##############
 
 
-  #############################################################################
-  ##                                                                         ## 
-  ##                 BEGIN: LumiCal Histogram Definition                     ##
-  ##                                                                         ## 
-  #############################################################################
+  ###############      BEGIN: LumiCal Histogram Definition      ###############
 
   dir_LC = outputFile.mkdir("LumiCal")
 
@@ -155,124 +106,71 @@ def make_TH1_file(args):
   dir_list.append(dir_LC)
   histo_list.append([hist_lc_hits])
 
-  #############################################################################
-  ##                                                                         ## 
-  ##                  END: LumiCal Histogram Definition                      ##
-  ##                                                                         ## 
-  #############################################################################
-  
+  ################      END: LumiCal Histogram Definition      ################
 
 
 
   # Loop over dataset
   for event in podio_reader.get("events"):
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                 BEGIN: Drift Chamber Event Loop                       ##
-    ##                                                                       ## 
-    ###########################################################################
+    ################      BEGIN: Drift Chamber Event Loop      ################
 
     n_hits = 0
     for dch_hit in event.get("DCHCollection"):
       n_hits += 1
     hist_dch_hits.Fill(n_hits)
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                    END: Drift Chamber Event Loop                      ##
-    ##                                                                       ## 
-    ###########################################################################
+    #################      END: Drift Chamber Event Loop      #################
 
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                BEGIN: Vertex Detector Event Loop                      ##
-    ##                                                                       ## 
-    ###########################################################################
+    ###############      BEGIN: Vertex Detector Event Loop      ###############
 
     n_hits = 0
     for vtxd_hit in event.get("VTXDCollection"):
       n_hits += 1
     hist_vtxd_hits.Fill(n_hits)
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                    END: Vertex Detector Event Loop                    ##
-    ##                                                                       ## 
-    ###########################################################################
+    ################      END: Vertex Detector Event Loop      ################
 
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                 BEGIN: Vertex Inner Barrel Event Loop                 ##
-    ##                                                                       ## 
-    ###########################################################################
+    #############      BEGIN: Vertex Inner Barrel Event Loop      #############
 
     n_hits = 0
     for vtxib_hit in event.get("VTXIBCollection"):
       n_hits += 1
     hist_vtxib_hits.Fill(n_hits)
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                  END: Vertex Inner Barrel Event Loop                  ##
-    ##                                                                       ## 
-    ###########################################################################
+    ##############      END: Vertex Inner Barrel Event Loop      ##############
 
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                 BEGIN: Vertex Outer Barrel Event Loop                 ##
-    ##                                                                       ## 
-    ###########################################################################
+    #############      BEGIN: Vertex Outer Barrel Event Loop      #############
 
     n_hits = 0
     for vtxob_hit in event.get("VTXOBCollection"):
       n_hits += 1
     hist_vtxob_hits.Fill(n_hits)
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                  END: Vertex Outer Barrel Event Loop                  ##
-    ##                                                                       ## 
-    ###########################################################################
+    ##############      END: Vertex Outer Barrel Event Loop      ##############
 
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                     BEGIN: Muon System Event Loop                     ##
-    ##                                                                       ## 
-    ###########################################################################
+    #################      BEGIN: Muon System Event Loop      #################
 
     n_hits = 0
     for mus_hit in event.get("MuonSystemCollection"):
       n_hits += 1
     hist_mus_hits.Fill(n_hits)
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                      END: Muon System Event Loop                      ##
-    ##                                                                       ## 
-    ###########################################################################
+    ##################      END: Muon System Event Loop      ##################
 
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                       BEGIN: LumiCal Event Loop                       ##
-    ##                                                                       ## 
-    ###########################################################################
+    ###################      BEGIN: LumiCal Event Loop      ###################
 
     n_hits = 0
     for lc_hit in event.get("LumiCalCollection"):
       n_hits += 1
     hist_lc_hits.Fill(n_hits)
 
-    ###########################################################################
-    ##                                                                       ## 
-    ##                        END: LumiCal Event Loop                        ##
-    ##                                                                       ## 
-    ###########################################################################
+    ####################      END: LumiCal Event Loop      ####################
 
 
 

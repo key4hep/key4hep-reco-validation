@@ -56,12 +56,7 @@ def make_TH1_file(args):
                   
 
 
-
-  #############################################################################
-  ##                                                                         ## 
-  ##               BEGIN: ARC standalone Histogram Definition                ##
-  ##                                                                         ## 
-  #############################################################################
+  ###########      BEGIN: ARC standalone Histogram Definition      ############
 
   dir_ARC = outputFile.mkdir("ARC_standalone")
 
@@ -79,12 +74,8 @@ def make_TH1_file(args):
   histo_list.append([hist_ARC_nPh, 
                      hist_ARC_theta,
                      hist_ARC_1stHit])
-
-  #############################################################################
-  ##                                                                         ##  
-  ##                END: ARC standalone Histogram Definition                 ##
-  ##                                                                         ## 
-  #############################################################################
+ 
+  ############      END: ARC standalone Histogram Definition      #############
   
 
 
@@ -92,12 +83,7 @@ def make_TH1_file(args):
   # loop over dataset
   for event in podio_reader.get("events"):
 
-
-    ###########################################################################
-    ##                                                                       ## 
-    ##                   BEGIN: ARC standalone Event Loop                    ##
-    ##                                                                       ## 
-    ###########################################################################
+    ###############      BEGIN: ARC standalone Event Loop      ################
 
     n_ph = 0
 
@@ -118,13 +104,8 @@ def make_TH1_file(args):
 
     hist_ARC_nPh.Fill(n_ph)
     hist_ARC_1stHit.Fill(theta_1stHit, n_ph)
-
-    ###########################################################################
-    ##                                                                       ## 
-    ##                    END: ARC standalone Event Loop                     ##
-    ##                                                                       ## 
-    ###########################################################################
-
+ 
+    ################      END: ARC standalone Event Loop      #################
 
 
   if args.norm:
