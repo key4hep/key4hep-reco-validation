@@ -1,3 +1,4 @@
+# enable exit on error to check correct script execution from within pipeline
 set -e
 
 # setup phase
@@ -17,7 +18,7 @@ source $FCCCONFIG/share/FCC-config/FullSim/IDEA/IDEA_o1_v03/ctest_sim_digi_reco.
 echo "ANALYSIS PHASE:"
 
 echo "Starting analysis script..."
-python $WORKAREA/key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/IDEA_make_TH1.py \
+python $WORKAREA/key4hep-reco-validation/scripts/FCCee/IDEA/IDEA_o1_v03/IDEA_make_TH1.py \
        -f IDEA_sim_digi_reco.root -o results.root
 echo "Script executed successfully"
 

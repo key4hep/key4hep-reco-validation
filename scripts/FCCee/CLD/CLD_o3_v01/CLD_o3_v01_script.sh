@@ -1,3 +1,4 @@
+# enable exit on error to check correct script execution from within pipeline
 set -e
 
 # setup phase
@@ -32,7 +33,7 @@ cd $WORKAREA/$GEOMETRY/$VERSION
 echo "ANALYSIS PHASE:"
 
 echo "Starting analysis script..."
-python $WORKAREA/key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ARC_make_TH1.py \
+python $WORKAREA/key4hep-reco-validation/scripts/FCCee/CLD/CLD_o3_v01/ARC_make_TH1.py \
        -f ARC_sim.root -o results.root
 echo "Script executed successfully"
 

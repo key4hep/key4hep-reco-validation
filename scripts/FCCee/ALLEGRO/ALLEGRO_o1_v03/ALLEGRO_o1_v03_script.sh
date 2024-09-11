@@ -1,3 +1,4 @@
+# enable exit on error to check correct script execution from within pipeline
 set -e
 
 # setup phase
@@ -17,7 +18,7 @@ source $FCCCONFIG/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/ctest_sim_digi
 echo "ANALYSIS PHASE:"
 
 echo "Starting analysis script..."
-python $WORKAREA/key4hep-reco-validation/scripts/FCCee/$GEOMETRY/$VERSION/ALLEGRO_make_TH1.py \
+python $WORKAREA/key4hep-reco-validation/scripts/FCCee/ALLEGRO/ALLEGRO_o1_v03/ALLEGRO_make_TH1.py \
        -f ALLEGRO_sim_digi_reco.root -o results.root
 echo "Script executed successfully"
 
