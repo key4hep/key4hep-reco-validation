@@ -86,12 +86,10 @@ def make_TH1_file(args):
     ###########################################################################
 
     for calo in event.get("CaloClusters"):
-      energy =  calo.getEnergy()
-      hist_ccE.Fill(energy)
+      hist_ccE.Fill(calo.getEnergy())
 
     for calo in event.get("CaloTopoClusters"):
-      energy =  calo.energy()
-      hist_ctcE.Fill(energy)
+      hist_ctcE.Fill(calo.energy())
 
     energy = 0
     for ecal in event.get("ECalBarrelModuleThetaMergedPositioned"):
