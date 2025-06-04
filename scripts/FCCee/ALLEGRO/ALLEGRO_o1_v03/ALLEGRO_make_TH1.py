@@ -35,17 +35,17 @@ def make_TH1_file(args):
   hist_ctcE = ROOT.TH1F("h_CaloTopoCluster_E",
                         "CaloTopoCluster Energy;Energy [MeV];Counts / 0.15 MeV",
                         100, 0, 15)
-  hist_ecal_totE = ROOT.TH1F("h_ECalBarrelModuleThetaMergedPosition_totE",
-                             "ECalBarrelModuleThetaMergedPosition total Energy per evt;Energy [MeV];Counts / 0.15 MeV",
+  hist_ecal_totE = ROOT.TH1F("h_ECalBarrelModuleThetaMerged_totE",
+                             "ECalBarrelModuleThetaMerged total Energy per evt;Energy [MeV];Counts / 0.15 MeV",
                              100, 0, 15)
-  hist_ecal_posX = ROOT.TH1F("h_ECalBarrelModuleThetaMergedPosition_posX",
-                             "ECalBarrelModuleThetaMergedPosition position X;X [mm];Counts / 37 mm",
+  hist_ecal_posX = ROOT.TH1F("h_ECalBarrelModuleThetaMerged_posX",
+                             "ECalBarrelModuleThetaMerged position X;X [mm];Counts / 37 mm",
                              150, -2770, 2770)
-  hist_ecal_posY = ROOT.TH1F("h_ECalBarrelModuleThetaMergedPosition_posY",
-                             "ECalBarrelModuleThetaMergedPosition position Y;Y [mm];Counts / 37 mm",
+  hist_ecal_posY = ROOT.TH1F("h_ECalBarrelModuleThetaMerged_posY",
+                             "ECalBarrelModuleThetaMerged position Y;Y [mm];Counts / 37 mm",
                              150, -2770, 2770)
-  hist_ecal_posZ = ROOT.TH1F("h_ECalBarrelModuleThetaMergedPosition_posZ",
-                             "ECalBarrelModuleThetaMergedPosition position Z;Z [mm];Counts / 41 mm",
+  hist_ecal_posZ = ROOT.TH1F("h_ECalBarrelModuleThetaMerged_posZ",
+                             "ECalBarrelModuleThetaMerged position Z;Z [mm];Counts / 41 mm",
                              150, -3100, 3100)
   
   dir_list.append(dir_ECalBarrel)
@@ -73,7 +73,7 @@ def make_TH1_file(args):
       hist_ctcE.Fill(calo.energy())
 
     energy = 0
-    for ecal in event.get("ECalBarrelModuleThetaMergedPositioned"):
+    for ecal in event.get("ECalBarrelModuleThetaMerged"):
         energy += ecal.energy()
         hist_ecal_posX.Fill(ecal.position().x)
         hist_ecal_posY.Fill(ecal.position().y)
@@ -113,8 +113,8 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser(
         description="Process simulation"
     )
-  parser.add_argument('-f', "--inputFile",  type=str, 
-                      help='The name of the simulation file to be processed', default='ALLEGRO_sim_digi_reco.root')
+  parser.add_argument('-f', "--inputFile",  type=str,
+                      help='The name of the simulation file to be processed', default='ALLEGRO_sim.root')
   parser.add_argument('-o', "--outputFile", type=str, 
                       help='The name of the ROOT file where to save output histograms', default='results.root')
   parser.add_argument('--norm', action='store_true',
