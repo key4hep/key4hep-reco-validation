@@ -8,22 +8,22 @@ import smtplib
 from email.message import EmailMessage
 
 
-def send_mail(sender, receiver, subject, body, server):
+def send_mail(args):
     """
     Send the email
     """
 
     # Create a text/plain message
     msg = EmailMessage()
-    msg.set_content(body)
+    msg.set_content(args.body)
 
-    msg["Subject"] = subject
-    msg["From"] = sender
-    msg["To"] = receiver
+    msg["Subject"] = args.subject
+    msg["From"] = getattr(args, 'from')
+    msg["To"] = args.to
 
     # Send the message using SMTP
-    smtp = smtplib.SMTP(server)
-    smtp.send_message(msg)
+    smtp = smtplib.SMTP(args.server)
+    smtp.send_message(args.body)
     smtp.quit()
 
 
@@ -84,7 +84,7 @@ def main():
         print('       Aborting...')
         sys.exit(1)
 
-    send_mail(args['from'], args.to, args.subject, args.body, args.server)
+    send_mail(args)
 
 
 if __name__ == "__main__":
