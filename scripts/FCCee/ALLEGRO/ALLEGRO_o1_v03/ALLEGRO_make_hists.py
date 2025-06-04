@@ -129,7 +129,7 @@ def main():
         "--inputFile",
         type=str,
         help="The name of the simulation file to be processed",
-        default="ALLEGRO_sim.root",
+        default="ALLEGRO_sim_digi_reco.root",
     )
     parser.add_argument(
         "-o",
