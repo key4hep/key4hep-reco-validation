@@ -23,7 +23,7 @@ def send_mail(args):
 
     # Send the message using SMTP
     smtp = smtplib.SMTP(args.server)
-    smtp.send_message(args.body)
+    smtp.send_message(msg)
     smtp.quit()
 
 
@@ -74,8 +74,8 @@ def main():
     args = parser.parse_args()
 
     if args.body is None:
-        if args.inputFile is not None:
-            with open(args.inputFile, "r", encoding="utf-8") as infile:
+        if args.input_file is not None:
+            with open(args.input_file, "r", encoding="utf-8") as infile:
                 args.body = infile.read()
 
     if args.body is None:
