@@ -18,6 +18,6 @@ bash "${FCCCONFIG}/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/ctest_sim_dig
 echo "ANALYSIS PHASE:"
 
 echo "Starting analysis script..."
-python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/ALLEGRO/ALLEGRO_o1_v03/ALLEGRO_make_TH1.py" \
-       -f ALLEGRO_sim_digi_reco.root -o results.root
+python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/ALLEGRO/ALLEGRO_o1_v03/ALLEGRO_make_hists.py" \
+       -f ALLEGRO_sim.root -o results.root
 echo "Script executed successfully"
