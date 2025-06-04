@@ -4,8 +4,8 @@ from podio import root_io
 
 
 def make_hist_file(args):
-    print(f'INFO: Input EDM4hep ROOT file: {args.inputFile}')
-    print(f'INFO: Output EDM4hep ROOT file: {args.outputFile}')
+    print(f'INFO: Input EDM4hep file: {args.inputFile}')
+    print(f'INFO: Output histogram file: {args.outputFile}')
 
     # create output ROOT file
     outputFile = ROOT.TFile(args.outputFile, "RECREATE")
@@ -37,29 +37,30 @@ def make_hist_file(args):
         15,
     )
     hist_ecal_totE = ROOT.TH1F(
-        "h_ECalBarrelModuleThetaMerged_totE",
-        "ECalBarrelModuleThetaMerged total Energy per evt;Energy [MeV];Counts / 0.15 MeV",
+        "h_ECalBarrelModuleThetaMergedPositioned_totE",
+        "ECalBarrelModuleThetaMergedPositioned total Energy per evt;Energy [MeV];"
+        "Counts / 0.15 MeV",
         100,
         0,
         15,
     )
     hist_ecal_posX = ROOT.TH1F(
-        "h_ECalBarrelModuleThetaMerged_posX",
-        "ECalBarrelModuleThetaMerged position X;X [mm];Counts / 37 mm",
+        "h_ECalBarrelModuleThetaMergedPositioned_posX",
+        "ECalBarrelModuleThetaMergedPositioned position X;X [mm];Counts / 37 mm",
         150,
         -2770,
         2770,
     )
     hist_ecal_posY = ROOT.TH1F(
-        "h_ECalBarrelModuleThetaMerged_posY",
-        "ECalBarrelModuleThetaMerged position Y;Y [mm];Counts / 37 mm",
+        "h_ECalBarrelModuleThetaMergedPositioned_posY",
+        "ECalBarrelModuleThetaMergedPositioned position Y;Y [mm];Counts / 37 mm",
         150,
         -2770,
         2770,
     )
     hist_ecal_posZ = ROOT.TH1F(
-        "h_ECalBarrelModuleThetaMerged_posZ",
-        "ECalBarrelModuleThetaMerged position Z;Z [mm];Counts / 41 mm",
+        "h_ECalBarrelModuleThetaMergedPositioned_posZ",
+        "ECalBarrelModuleThetaMergedPositioned position Z;Z [mm];Counts / 41 mm",
         150,
         -3100,
         3100,
@@ -77,12 +78,12 @@ def make_hist_file(args):
         ]
     )
 
-    ##############      END: ECal Barrel Histogram Definition      ##############
+    # ############      END: ECal Barrel Histogram Definition      ############
 
     # Loop over dataset
     for event in podio_reader.get("events"):
 
-        ##################     BEGIN: ECal Barrel Event Loop     ##################
+        # ################     BEGIN: ECal Barrel Event Loop     ##############
 
         for calo in event.get("CaloClusters"):
             hist_ccE.Fill(calo.getEnergy())
@@ -91,14 +92,14 @@ def make_hist_file(args):
             hist_ctcE.Fill(calo.energy())
 
         energy = 0
-        for ecal in event.get("ECalBarrelModuleThetaMerged"):
+        for ecal in event.get("ECalBarrelModuleThetaMergedPositioned"):
             energy += ecal.energy()
             hist_ecal_posX.Fill(ecal.position().x)
             hist_ecal_posY.Fill(ecal.position().y)
             hist_ecal_posZ.Fill(ecal.position().z)
         hist_ecal_totE.Fill(energy)
 
-        ##################      END: ECal Barrel Event Loop      ##################
+        # ###############      END: ECal Barrel Event Loop      ###############
 
     # normalize if desired
     if args.norm:
@@ -117,7 +118,7 @@ def make_hist_file(args):
     outputFile.Close()
 
 
-#########################################################################
+# #############################################################################
 def main():
     '''
     Parse input arguments and start generation of the histograms.
