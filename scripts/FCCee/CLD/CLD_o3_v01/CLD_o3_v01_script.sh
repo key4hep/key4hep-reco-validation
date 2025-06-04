@@ -6,19 +6,14 @@ echo "SETUP PHASE:"
 
 [ -z "$KEY4HEP_STACK" ] && source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
 
-echo "Downloading necessary Github repos..."
-git clone https://github.com/key4hep/k4geo.git
-K4GEO_PATH=$(realpath k4geo)
-echo "Download terminated - setup stage successful"
-
 
 # simulation phase
 echo "SIMULATION PHASE:"
 
 cd "${CLDCONFIG}/share/CLDConfig"
 echo "Starting simulation..."
+# compact file specified in `cld_arc_steer.py`
 ddsim --steeringFile cld_arc_steer.py \
-      --compactFile "${K4GEO_PATH}/test/compact/ARC_standalone_o1_v01.xml" \
       --enableGun --gun.distribution "cos(theta)" \
       --gun.energy "20*GeV" --gun.particle proton \
       --numberOfEvents "${NUMBER_OF_EVENTS}" \
@@ -35,5 +30,5 @@ echo "ANALYSIS PHASE:"
 echo "Starting analysis script..."
 python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/CLD/CLD_o3_v01/ARC_make_hists.py" \
        -f ARC_sim.root -o results.root \
-       -c "${K4GEO_PATH}/test/compact/ARC_standalone_o1_v01.xml"
+       -c "${K4GEO}/FCCee/CLD/compact/CLD_o3_v01/CLD_o3_v01.xml"
 echo "Script executed successfully"
