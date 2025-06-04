@@ -56,7 +56,7 @@ def main():
     parser.add_argument(
         "--from",
         type=str,
-        default="key4hep-reco-validation@cern.ch",
+        default="key4hep-reco-validation-notifications@cern.ch",
         help="email address of the sender"
     )
     parser.add_argument(
