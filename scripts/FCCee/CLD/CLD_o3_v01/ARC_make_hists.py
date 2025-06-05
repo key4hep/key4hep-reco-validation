@@ -75,7 +75,7 @@ def make_hists_file(args):
             if pdgID in (22, -22):
                 n_ph += 1
                 cellID = arc_hit.getCellID()
-                print('cellID: ' + cellID)
+                print(f'cellID: {cellID}')
                 x = idposConv.position(cellID)
                 theta = x.theta()
 
