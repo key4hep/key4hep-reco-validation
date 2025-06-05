@@ -30,19 +30,6 @@ def make_TH1_file(args):
 
     #############      END: Drift Chamber Histogram Definition      #############
 
-    ###########      BEGIN: Vertex Detector Histogram Definition      ###########
-
-    dir_VTXD = outputFile.mkdir("VertexDetector")
-
-    hist_vtxd_hits = ROOT.TH1F(
-        "h_VertexDetector_hits", "Number of hits;Hits;Counts / 5 hits", 40, 0, 200
-    )
-
-    dir_list.append(dir_VTXD)
-    histo_list.append([hist_vtxd_hits])
-
-    ############      END: Vertex Detector Histogram Definition      ############
-
     #########     BEGIN: Vertex Barrel Histogram Definition      ##########
 
     dir_VTXB = outputFile.mkdir("VertexBarrel")
@@ -106,15 +93,6 @@ def make_TH1_file(args):
         hist_dch_hits.Fill(n_hits)
 
         # #############      END: Drift Chamber Event Loop      ###############
-
-        # ###########      BEGIN: Vertex Detector Event Loop      #############
-
-        n_hits = 0
-        for vtxd_hit in event.get("VTXDCollection"):
-            n_hits += 1
-        hist_vtxd_hits.Fill(n_hits)
-
-        # ############      END: Vertex Detector Event Loop      ##############
 
         # #########      BEGIN: Vertex Barrel Event Loop      ###########
 
