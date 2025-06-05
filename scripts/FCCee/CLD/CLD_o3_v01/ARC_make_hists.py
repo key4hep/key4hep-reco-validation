@@ -141,8 +141,7 @@ def main():
         print('       Aborting...')
         sys.exit(1)
 
-    ph_presence = make_hists_file(args)
-    print(ph_presence)
+    make_hists_file(args)
 
 
 if __name__ == "__main__":
