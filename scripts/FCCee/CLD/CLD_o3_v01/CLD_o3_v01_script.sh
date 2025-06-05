@@ -22,6 +22,8 @@ ddsim --steeringFile cld_arc_steer.py \
       --part.userParticleHandler="" > "${WORKAREA}/${GEOMETRY}/${VERSION}/ddsim_log.txt"
 echo "Simulation execution finished"
 cd "${WORKAREA}/${GEOMETRY}/${VERSION}"
+echo "PWD:"
+pwd
 
 
 # analyze simulation file
