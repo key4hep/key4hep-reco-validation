@@ -3,6 +3,8 @@ set -e
 
 # setup phase
 echo "SETUP PHASE:"
+echo "VERSION: ${VERSION}"
+echo "GEOMETRY: ${GEOMETRY}"
 
 [ -z "$KEY4HEP_STACK" ] && source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
 
