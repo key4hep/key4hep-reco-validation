@@ -66,7 +66,9 @@ def make_hists_file(args):
         n_ph = 0
 
         p = (event.get("MCParticles"))[0]
-        mom = ROOT.TVector3(p.getMomentum().x, p.getMomentum().y, p.getMomentum().z)
+        mom = ROOT.TVector3(p.getMomentum().x,
+                            p.getMomentum().y,
+                            p.getMomentum().z)
         theta_1stHit = mom.Theta()
 
         for arc_hit in event.get("ArcCollection"):
@@ -74,12 +76,10 @@ def make_hists_file(args):
             pdgID = particle.getPDG()
             if pdgID in (22, -22):
                 n_ph += 1
-                cellID = arc_hit.getCellID()
-                print(f'cellID: {cellID}')
-                x = idposConv.position(cellID)
-                theta = x.theta()
+                # cellID = arc_hit.getCellID()
+                # print(f'cellID: {cellID}')
 
-                hist_ARC_theta.Fill(theta)
+                # hist_ARC_theta.Fill(idposConv.position(cellID).theta())
 
         hist_ARC_nPh.Fill(n_ph)
         hist_ARC_1stHit.Fill(theta_1stHit, n_ph)
