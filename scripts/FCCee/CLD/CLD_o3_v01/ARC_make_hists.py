@@ -38,13 +38,13 @@ def make_hists_file(args):
         0,
         250,
     )
-    hist_ARC_theta = ROOT.TH1F(
-        "h_ARC_theta",
-        "Photons counts vs. #theta;Polar angle #theta;Photon count / 35 mrad",
-        90,
-        0,
-        np.pi,
-    )
+    # hist_ARC_theta = ROOT.TH1F(
+    #     "h_ARC_theta",
+    #     "Photons counts vs. #theta;Polar angle #theta;Photon count / 35 mrad",
+    #     90,
+    #     0,
+    #     np.pi,
+    # )
     hist_ARC_1stHit = ROOT.TH1F(
         "h_ARC_1stHit",
         "Photons counts vs. #theta of incoming particle;Polar angle #theta;Photon count / 35 mrad",
@@ -54,7 +54,8 @@ def make_hists_file(args):
     )
 
     dir_list.append(dir_ARC)
-    histo_list.append([hist_ARC_nPh, hist_ARC_theta, hist_ARC_1stHit])
+    # histo_list.append([hist_ARC_nPh, hist_ARC_theta, hist_ARC_1stHit])
+    histo_list.append([hist_ARC_nPh, hist_ARC_1stHit])
 
     # ##########      END: ARC standalone Histogram Definition      ###########
 
@@ -94,8 +95,8 @@ def make_hists_file(args):
                 h.Scale(factor)
 
     # save to file
-    for dir, h_list in zip(dir_list, histo_list):
-        dir.cd()
+    for directory, h_list in zip(dir_list, histo_list):
+        directory.cd()
         for h in h_list:
             h.Write()
 
