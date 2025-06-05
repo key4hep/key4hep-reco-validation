@@ -12,8 +12,8 @@ echo "SIMULATION PHASE:"
 
 cd "${CLDCONFIG}/share/CLDConfig"
 echo "Starting simulation..."
-# compact file specified in `cld_arc_steer.py`
 ddsim --steeringFile cld_arc_steer.py \
+      --compactFile "${K4GEO}/FCCee/CLD/compact/CLD_o3_v01/CLD_o3_v01.xml" \
       --enableGun --gun.distribution "cos(theta)" \
       --gun.energy "20*GeV" --gun.particle proton \
       --numberOfEvents "${NUMBER_OF_EVENTS}" \
