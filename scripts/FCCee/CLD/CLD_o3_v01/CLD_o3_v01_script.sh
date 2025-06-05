@@ -31,4 +31,5 @@ echo "Starting analysis script..."
 python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/CLD/CLD_o3_v01/ARC_make_hists.py" \
        -f ARC_sim.root -o results.root \
        -c "${K4GEO}/FCCee/CLD/compact/CLD_o3_v01/CLD_o3_v01.xml"
+echo Analisis exit code: $?
 echo "Analysis execution finished"
