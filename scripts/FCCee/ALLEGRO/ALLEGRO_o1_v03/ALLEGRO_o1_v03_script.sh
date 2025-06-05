@@ -11,10 +11,7 @@ echo "SETUP PHASE:"
 echo "SIM-DIGI-RECO PHASE:"
 
 echo "Starting script..."
-# bash "${FCCCONFIG}/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/ctest_sim_digi_reco.sh"
-git clone https://github.com/kjvbrt/FCC-config.git -b save-cells
-bash FCC-config/FCCee/FullSim/ALLEGRO/ALLEGRO_o1_v03/ctest_sim_digi_reco.sh
-
+bash "${FCCCONFIG}/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/ctest_sim_digi_reco.sh"
 
 
 # analyze simulation file
