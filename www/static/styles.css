@@ -146,7 +146,7 @@ p {
 }
 
 .dropdown-submenu > .dropdown-item::after {
-    content: ""; 
+    content: "";
     float: right;
     margin-top: 8px;
 }

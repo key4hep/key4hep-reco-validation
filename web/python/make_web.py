@@ -100,7 +100,7 @@ for i_folder, folder in enumerate(detector_folders):
         metadata = get_metadata(os.path.join(args.dest, folder, version))
         subsystem_folders = [subsyst for subsyst in os.listdir(os.path.join(args.dest, folder, version)) if os.path.isdir(os.path.join(args.dest, folder, version, subsyst))]
         plot_category_names = [FOLDER_NAMES[x] for x in subsystem_folders]
-    
+
         template = env.get_template('version_index.html')
         with open(os.path.join(args.dest, folder, version, 'index.html'), 'w') as f:
             f.write(template.render(subsystems=zip(subsystem_folders, plot_category_names), table=metadata, version=version, detector_list=zip(detector_folders, version_folders)))
