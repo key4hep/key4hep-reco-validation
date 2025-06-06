@@ -6,3 +6,6 @@ of the event reconstruction chain as well.
 
 The resulting validation plots can be found at
 [key4hep-validation.web.cern.ch](https://key4hep-validation.web.cern.ch/).
+
+Running of the validation scripts is done by a GitLab CI script found
+[here](https://gitlab.cern.ch/key4hep/k4-validation).
