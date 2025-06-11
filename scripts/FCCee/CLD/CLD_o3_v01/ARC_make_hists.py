@@ -26,8 +26,6 @@ def make_hists_file(args):
     # set list of (list of) histograms created (one list per subsystem to check)
     histo_list = []
 
-    # ########      BEGIN: ARC standalone Histogram Definition      ###########
-
     dir_ARC = outputFile.mkdir("ARC_standalone")
 
     hist_ARC_nPh = ROOT.TH1F(
@@ -38,6 +36,8 @@ def make_hists_file(args):
         0,
         250,
     )
+    # TODO: Disabling the plot because the conversion from cellID to position
+    # causes seg-faults
     # hist_ARC_theta = ROOT.TH1F(
     #     "h_ARC_theta",
     #     "Photons counts vs. #theta;Polar angle #theta;Photon count / 35 mrad",
@@ -57,12 +57,8 @@ def make_hists_file(args):
     # histo_list.append([hist_ARC_nPh, hist_ARC_theta, hist_ARC_1stHit])
     histo_list.append([hist_ARC_nPh, hist_ARC_1stHit])
 
-    # ##########      END: ARC standalone Histogram Definition      ###########
-
     # loop over dataset
     for event in podio_reader.get("events"):
-
-        # ###########      BEGIN: ARC standalone Event Loop      ##############
 
         n_ph = 0
 
@@ -78,14 +74,10 @@ def make_hists_file(args):
             if pdgID in (22, -22):
                 n_ph += 1
                 # cellID = arc_hit.getCellID()
-                # print(f'cellID: {cellID}')
-
                 # hist_ARC_theta.Fill(idposConv.position(cellID).theta())
 
         hist_ARC_nPh.Fill(n_ph)
         hist_ARC_1stHit.Fill(theta_1stHit, n_ph)
-
-        # ############      END: ARC standalone Event Loop      ###############
 
     if args.norm:
         n_evts = len(podio_reader.get("events"))

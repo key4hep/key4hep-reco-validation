@@ -17,7 +17,7 @@ def make_TH1_file(args):
     # set list of (list of) histograms created (one list per subsystem to check)
     histo_list = []
 
-    ############      BEGIN: Drift Chamber Histogram Definition      ############
+    # Drift Chamber Histograms
 
     dir_DCH = outputFile.mkdir("DriftChamber")
 
@@ -28,9 +28,7 @@ def make_TH1_file(args):
     dir_list.append(dir_DCH)
     histo_list.append([hist_dch_hits])
 
-    #############      END: Drift Chamber Histogram Definition      #############
-
-    #########     BEGIN: Vertex Barrel Histogram Definition      ##########
+    # Vertex Barrel Histograms
 
     dir_VTXB = outputFile.mkdir("VertexBarrel")
 
@@ -41,9 +39,7 @@ def make_TH1_file(args):
     dir_list.append(dir_VTXB)
     histo_list.append([hist_vtxb_hits])
 
-    # #######     END: Vertex Barrel Histogram Definition      ##########
-
-    # ######     BEGIN: Vertex Endcap Histogram Definition      #########
+    # Vertex Endcap Histograms
 
     dir_VTXE = outputFile.mkdir("VertexEndcap")
 
@@ -54,9 +50,7 @@ def make_TH1_file(args):
     dir_list.append(dir_VTXE)
     histo_list.append([hist_vtxe_hits])
 
-    # ########     END: Vertex Endcap Histogram Definition      #########
-
-    # ###########      BEGIN: Muon System Histogram Definition      ###########
+    # Muon System Histograms
 
     dir_MUS = outputFile.mkdir("MuonSystem")
 
@@ -67,9 +61,7 @@ def make_TH1_file(args):
     dir_list.append(dir_MUS)
     histo_list.append([hist_mus_hits])
 
-    # ##########      END: Muon System Histogram Definition      ##############
-
-    # ###########      BEGIN: LumiCal Histogram Definition      ###############
+    # LumiCal Histograms
 
     dir_LC = outputFile.mkdir("LumiCal")
 
@@ -80,55 +72,38 @@ def make_TH1_file(args):
     dir_list.append(dir_LC)
     histo_list.append([hist_lc_hits])
 
-    # ###########      END: LumiCal Histogram Definition      ##############
-
     # Loop over dataset
     for event in podio_reader.get("events"):
 
-        # ###########      BEGIN: Drift Chamber Event Loop      ##############
-
+        # Drift Chamber Event Loop
         n_hits = 0
         for dch_hit in event.get("DCHCollection"):
             n_hits += 1
         hist_dch_hits.Fill(n_hits)
 
-        # #############      END: Drift Chamber Event Loop      ###############
-
-        # #########      BEGIN: Vertex Barrel Event Loop      ###########
-
+        # Vertex Barrel Event Loop
         n_hits = 0
         for vtxb_hit in event.get("VertexBarrelCollection"):
             n_hits += 1
         hist_vtxb_hits.Fill(n_hits)
 
-        # ##########      END: Vertex Barrel Event Loop      ############
-
-        # #########      BEGIN: Vertex Endcap Event Loop      ###########
-
+        # Vertex Endcap Event Loop
         n_hits = 0
         for vtxe_hit in event.get("VertexEndcapCollection"):
             n_hits += 1
         hist_vtxe_hits.Fill(n_hits)
 
-        # ##########      END: Vertex Endcap Event Loop      ############
-
-        # #############      BEGIN: Muon System Event Loop      ###############
-
+        # Muon System Event Loop
         n_hits = 0
         for mus_hit in event.get("MuonSystemCollection"):
             n_hits += 1
         hist_mus_hits.Fill(n_hits)
 
-        # ##############      END: Muon System Event Loop      ################
-
-        # ###############      BEGIN: LumiCal Event Loop      #################
-
+        # LumiCal Event Loop
         n_hits = 0
         for lc_hit in event.get("LumiCalCollection"):
             n_hits += 1
         hist_lc_hits.Fill(n_hits)
-
-        # ################      END: LumiCal Event Loop      ##################
 
     # normalize if desired
     if args.norm:

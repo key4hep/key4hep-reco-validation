@@ -18,8 +18,6 @@ def make_hist_file(args):
     # set list of (list of) histograms created (one list per subsystem to check)
     histo_list = []
 
-    ############     BEGIN: ECal Barrel Histogram Definition      #############
-
     dir_ECalBarrel = outputFile.mkdir("ECalBarrel")
 
     hist_ccE = ROOT.TH1F(
@@ -78,12 +76,8 @@ def make_hist_file(args):
         ]
     )
 
-    # ############      END: ECal Barrel Histogram Definition      ############
-
     # Loop over dataset
     for event in podio_reader.get("events"):
-
-        # ################     BEGIN: ECal Barrel Event Loop     ##############
 
         for calo in event.get("CaloClusters"):
             hist_ccE.Fill(calo.getEnergy())
@@ -98,8 +92,6 @@ def make_hist_file(args):
             hist_ecal_posY.Fill(ecal.position().y)
             hist_ecal_posZ.Fill(ecal.position().z)
         hist_ecal_totE.Fill(energy)
-
-        # ###############      END: ECal Barrel Event Loop      ###############
 
     # normalize if desired
     if args.norm:
