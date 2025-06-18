@@ -60,7 +60,7 @@ members_dict = {
 relations_dict = {
     "MCParticle": ["Parents", "Daughters"],
     "CaloHitContribution": ["Particle"],
-    "SimCalorimeterHit": ["Particle"],
+    "SimCalorimeterHit": ["Contributions"],
     "SimTrackerHit": ["Particle"],
 }
 
@@ -69,6 +69,8 @@ comparison_dict = {}    # This dictionary will contain comparison results for ea
                         # Discrete differences will be stored as the proportion of differing to total values.
 
 err_dict = {}
+err_loc = {}
+
 
 args = parser.parse_args()
 
@@ -79,6 +81,56 @@ events_new = reader_new.get("events")
 events_reference = reader_reference.get("events")
 print(f"Number of events in new file: {len(events_new)}")
 print(f"Number of events in reference file: {len(events_reference)}")
+
+
+def add_bad_hit(err_dict, frame, collection, member, bad_hit):  # Define function outside the loop to avoid redefinition
+    if member not in err_dict[f'Frame[{frame}]'][f'Collection: {collection}']["members"]:
+        err_dict[f'Frame[{frame}]'][f'Collection: {collection}']["members"][member] = {"bad_hits": []}
+    err_dict[f'Frame[{frame}]'][f'Collection: {collection}']["members"][member]["bad_hits"].append(bad_hit)
+
+
+def gen_error_string(err_dict):
+    error_string = []
+    error_string.append("\nErrors found during comparison:\n")
+    for frame, frame_errors in err_dict.items():
+        frame_has_errors = False
+        # Check if frame has general errors
+        if "Errors" in frame_errors and frame_errors["Errors"]:
+            frame_has_errors = True
+        # Check if any collection in the frame has errors
+        collections_with_errors = []
+        for collection_key, collection_errors in frame_errors.items():
+            if collection_key == "Errors":
+                continue
+            has_collection_error = (
+                ("Errors" in collection_errors and collection_errors["Errors"])
+                or any(
+                    "bad_hits" in member_info and member_info["bad_hits"]
+                    for member_info in collection_errors.get("members", {}).values()
+                )
+            )
+            if has_collection_error:
+                collections_with_errors.append(collection_key)
+                frame_has_errors = True
+        if frame_has_errors:
+            error_string.append(f"{frame}:")
+            # Print general errors for the frame
+            if "Errors" in frame_errors and frame_errors["Errors"]:
+                for err in frame_errors["Errors"]:
+                    error_string.append(f"  General error: {err}")
+            # Print only collections with errors
+            for collection_key in collections_with_errors:
+                collection_errors = frame_errors[collection_key]
+                error_string.append(f"  {collection_key}:")
+                if "Errors" in collection_errors and collection_errors["Errors"]:
+                    for err in collection_errors["Errors"]:
+                        error_string.append(f"    Error: {err}")
+                if "members" in collection_errors:
+                    for member, member_info in collection_errors["members"].items():
+                        if "bad_hits" in member_info and member_info["bad_hits"]:
+                            error_string.append(f"    Member '{member}' bad hit indices: {member_info['bad_hits']}")
+    return "\n".join(error_string)
+
 
 for i, frame_new in tqdm(enumerate(events_new), total=len(events_new)):
     err_dict[f"Frame[{i}]"] = {"Errors": []}
@@ -107,7 +159,7 @@ for i, frame_new in tqdm(enumerate(events_new), total=len(events_new)):
             )
     common_collections = [c for c in reference_collections if c in new_collections]
     for collection in common_collections:
-        err_dict[f"Frame[{i}]"][f"Collection: {collection}"] = {"Errors": []}
+        err_dict[f"Frame[{i}]"][f"Collection: {collection}"] = {"Errors": [], 'members': {}}
         comparison_dict[f"Frame[{i}]"][f"Collection: {collection}"] = {}
         print(f'Checking collection "{collection}"')
         hits_new = frame_new.get(collection)
@@ -141,6 +193,8 @@ for i, frame_new in tqdm(enumerate(events_new), total=len(events_new)):
                 
                 for member in members["vector"]:
                     lists_for_stats["vector"][member] = []
+                
+
 
         for j, (hit_new, hit_reference) in enumerate(zip(hits_new, hits_reference)):
             
@@ -151,12 +205,16 @@ for i, frame_new in tqdm(enumerate(events_new), total=len(events_new)):
             for member in lists_for_stats["continuous"].keys():
                 new_val = new_getters[member]()
                 ref_val = ref_getters[member]()
+                if new_val != ref_val:
+                    add_bad_hit(err_dict, i, collection, member, j)
+                # Compute relative difference
                 lists_for_stats["continuous"][member].append(
                     (new_val - ref_val) / ref_val if ref_val != 0 else 0
                 )
             for member in lists_for_stats["discrete"].keys():
                 if getattr(hit_new, f'get{member}')() != getattr(hit_reference, f'get{member}')():
                     lists_for_stats["discrete"][member].append(1)
+                    add_bad_hit(err_dict, i, collection, member, j)
                 else:
                     lists_for_stats["discrete"][member].append(0)
             for member in lists_for_stats["vector"].keys():
@@ -170,6 +228,8 @@ for i, frame_new in tqdm(enumerate(events_new), total=len(events_new)):
                 ref_norm = np.linalg.norm([vec_ref.x, vec_ref.y, vec_ref.z])
                 # Relative displacement error (sensitive to both magnitude and direction)
                 rel_disp_err = disp_norm / ref_norm if ref_norm != 0 else 0
+                if rel_disp_err > 0:
+                    add_bad_hit(err_dict, i, collection, member, j)
                 lists_for_stats["vector"][member].append(rel_disp_err)
         
         # Now compute the statistics for each member
@@ -197,7 +257,7 @@ for i, frame_new in tqdm(enumerate(events_new), total=len(events_new)):
                 comparison_dict[f"Frame[{i}]"][f"Collection: {collection}"][f"Vector: {member}"] = None
         print('\n\n')
 
-def summarize_offsets(comparison_dict, members_dict):
+def summarize_offsets(comparison_dict, err_dict):
     summary = []
     summary.append("Summary of Offsets\n")
     # Per-collection, per-member averages across all events
@@ -215,6 +275,9 @@ def summarize_offsets(comparison_dict, members_dict):
                 if value is not None:
                     collection_stats[collection_name][key].append(value)
 
+    # Print errors first
+    summary.append(gen_error_string(err_dict))
+    
     # Print averages first
     summary.append("Averages across all events:\n")
     for collection_name, stats in collection_stats.items():
@@ -239,10 +302,13 @@ new_file_base = os.path.basename(args.new_file)
 ref_file_base = os.path.basename(args.reference_file)
 summary_filename = f"summary_offsets_{new_file_base}_vs_{ref_file_base}.txt"
 
+print(gen_error_string(err_dict))
+
 with open(summary_filename, "w") as f:
-    f.write(summarize_offsets(comparison_dict, members_dict))
+    f.write(summarize_offsets(comparison_dict, err_dict))
 
 print(f"Summary written to {summary_filename}")
+
 
     # for relation_reference, relation_new in zip(
     #     args.reference_relation, args.new_relation
