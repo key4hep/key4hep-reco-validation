@@ -67,14 +67,9 @@ def add_bad_hit(err_dict, frame, collection, member, bad_hit, is_relation=False)
     """
     Record the index of a hit that differs between new and reference files.
     """
-    if not is_relation:
-        if member not in err_dict[f'Frame[{frame}]'][f'Collection: {collection}']["members"]:
-            err_dict[f'Frame[{frame}]'][f'Collection: {collection}']["members"][member] = {"bad_hits": []}
-        err_dict[f'Frame[{frame}]'][f'Collection: {collection}']["members"][member]["bad_hits"].append(bad_hit)
-    else:
-        if member not in err_dict[f'Frame[{frame}]'][f'Collection: {collection}']["relations"]:
-            err_dict[f'Frame[{frame}]'][f'Collection: {collection}']["relations"][member] = {"bad_hits": []}
-        err_dict[f'Frame[{frame}]'][f'Collection: {collection}']["relations"][member]["bad_hits"].append(bad_hit)
+    key = "relations" if is_relation else "members"
+    coll_dict = err_dict[f'Frame[{frame}]'][f'Collection: {collection}'][key].setdefault(member, {"bad_hits": []})
+    coll_dict["bad_hits"].append(bad_hit)
 
 def get_collection_members(collection, members_dict):
     """
