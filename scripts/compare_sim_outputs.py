@@ -63,13 +63,13 @@ def parse_args():
 
     return parser.parse_args()
 
-def add_bad_hit(err_dict, frame, collection, member, bad_hit, is_relation=False):
+def add_bad_hit(err_dict, frame, collection, member, hit_it, is_relation=False):
     """
     Record the index of a hit that differs between new and reference files.
     """
     key = "relations" if is_relation else "members"
     coll_dict = err_dict[f'Frame[{frame}]'][f'Collection: {collection}'][key].setdefault(member, {"bad_hits": []})
-    coll_dict["bad_hits"].append(bad_hit)
+    coll_dict["bad_hits"].append(hit_it)
 
 def get_collection_members(collection, members_dict):
     """
@@ -89,7 +89,7 @@ def get_relation_members(hit, relations_dict):
             return relations
     return {'OneToMany': [], 'OneToOne': []}
 
-def compare_members(hit_new, hit_reference, i, j, collection, err_dict, lists_for_stats, hit_counter):
+def compare_members(hit_new, hit_reference, frame_it, hit_it, collection, err_dict, lists_for_stats, hit_counter):
     # Compare continuous members (e.g., energies)
     members = get_collection_members(hit_new, members_dict)
     new_getters = {member: getattr(hit_new, f'get{member}') for member in members["continuous"]}
@@ -99,7 +99,7 @@ def compare_members(hit_new, hit_reference, i, j, collection, err_dict, lists_fo
         new_val = new_getters[member]()
         ref_val = ref_getters[member]()
         if new_val != ref_val:
-            add_bad_hit(err_dict, i, collection, member, j)
+            add_bad_hit(err_dict, frame_it, collection, member, hit_it)
         lists_for_stats["continuous"][member].append(
             (new_val - ref_val) / ref_val if ref_val != 0 else 0
         )
@@ -108,7 +108,7 @@ def compare_members(hit_new, hit_reference, i, j, collection, err_dict, lists_fo
         hit_counter[0] += 1
         if getattr(hit_new, f'get{member}')() != getattr(hit_reference, f'get{member}')():
             lists_for_stats["discrete"][member].append(1)
-            add_bad_hit(err_dict, i, collection, member, j)
+            add_bad_hit(err_dict, frame_it, collection, member, hit_it)
         else:
             lists_for_stats["discrete"][member].append(0)
     # Compare 3-vector members (e.g., positions, momenta)
@@ -123,11 +123,11 @@ def compare_members(hit_new, hit_reference, i, j, collection, err_dict, lists_fo
         ref_norm = np.linalg.norm([vec_ref.x, vec_ref.y, vec_ref.z])
         rel_disp_err = disp_norm / ref_norm if ref_norm != 0 else 0
         if rel_disp_err > 0:
-            add_bad_hit(err_dict, i, collection, member, j)
+            add_bad_hit(err_dict, frame_it, collection, member, hit_it)
         lists_for_stats["vector"][member].append(rel_disp_err)
     return lists_for_stats
 
-def compare_relations(hit_new, hit_reference, relations_dict, i, j,collection, err_dict, hit_counter):
+def compare_relations(hit_new, hit_reference, relations_dict, frame_it, hit_it, collection, err_dict, hit_counter):
     """
     Compare relations between hits in new and reference collections.
     Records errors if relations differ.
@@ -138,7 +138,7 @@ def compare_relations(hit_new, hit_reference, relations_dict, i, j,collection, e
         new_relation = [elem.id().index for elem in getattr(hit_new, f"get{relation}")()]
         ref_relation = [elem.id().index for elem in getattr(hit_reference, f"get{relation}")()]
         if new_relation != ref_relation:
-            add_bad_hit(err_dict, i, collection, relation, j, is_relation=True)
+            add_bad_hit(err_dict, frame_it, collection, relation, hit_it, is_relation=True)
             # print(f"Relation '{relation}' differs for hit {j} in collection {collection} of frame {i}")
             # print(f"New: {new_relation}, Reference: {ref_relation}")
     for relation in relations['OneToOne']:
@@ -146,11 +146,11 @@ def compare_relations(hit_new, hit_reference, relations_dict, i, j,collection, e
         new_relation = getattr(hit_new, f"get{relation}")().id().index
         ref_relation = getattr(hit_reference, f"get{relation}")().id().index
         if new_relation != ref_relation:
-            add_bad_hit(err_dict, i, collection, relation, j, is_relation=True)
+            add_bad_hit(err_dict, frame_it, collection, relation, hit_it, is_relation=True)
             # print(f"Relation '{relation}' differs for hit {j} in collection {collection} of frame {i}")
             # print(f"New: {new_relation}, Reference: {ref_relation}")
 
-def compare_hits(hits_new, hits_reference, members, i, collection, err_dict, hit_counter):
+def compare_hits(hits_new, hits_reference, members, frame_it, collection, err_dict, hit_counter):
     """
     Compare hits between new and reference collections for all specified members.
     Returns statistics for each member.
@@ -165,15 +165,15 @@ def compare_hits(hits_new, hits_reference, members, i, collection, err_dict, hit
         lists_for_stats["vector"][member] = []
 
     # Compare each hit in the collections
-    for j, (hit_new, hit_reference) in enumerate(zip(hits_new, hits_reference)):
+    for hit_it, (hit_new, hit_reference) in enumerate(zip(hits_new, hits_reference)):
         # Compare members of the hits
-        lists_for_stats = compare_members(hit_new, hit_reference, i, j, collection, err_dict, lists_for_stats, hit_counter)
-        compare_relations(hit_new, hit_reference, relations_dict, i, j, collection, err_dict, hit_counter)
+        lists_for_stats = compare_members(hit_new, hit_reference, frame_it, hit_it, collection, err_dict, lists_for_stats, hit_counter)
+        compare_relations(hit_new, hit_reference, relations_dict, frame_it, hit_it, collection, err_dict, hit_counter)
     return lists_for_stats
 
 
 
-def process_event(frame_new, frame_reference, members_dict, i, err_dict, comparison_dict, hit_counter):
+def process_event(frame_new, frame_reference, members_dict, frame_it, err_dict, comparison_dict, hit_counter):
     """
     Compare all collections in a single event (frame) between new and reference files.
     Records errors and statistics.
@@ -185,40 +185,40 @@ def process_event(frame_new, frame_reference, members_dict, i, err_dict, compari
         missing_in_new = set(reference_collections) - set(new_collections)
         missing_in_reference = set(new_collections) - set(reference_collections)
         if missing_in_new:
-            err_dict[f"Frame[{i}]"]["Errors"].append(
+            err_dict[f"Frame[{frame_it}]"]["Errors"].append(
                 {"Collections missing in new": missing_in_new}
             )
         elif missing_in_reference:
-            err_dict[f"Frame[{i}]"]["Errors"].append(
+            err_dict[f"Frame[{frame_it}]"]["Errors"].append(
                 {"Collections missing in reference": missing_in_reference}
             )
         else:
-            err_dict[f"Frame[{i}]"]["Errors"].append(
+            err_dict[f"Frame[{frame_it}]"]["Errors"].append(
                 {"Collections are different in length": f"{len(reference_collections)} vs {len(new_collections)}"}
             )
     # Only compare collections present in both files
     common_collections = [c for c in reference_collections if c in new_collections]
     for collection in common_collections:
-        err_dict[f"Frame[{i}]"][f"Collection: {collection}"] = {"Errors": [], 'members': {}, 'relations': {}}
-        comparison_dict[f"Frame[{i}]"][f"Collection: {collection}"] = {}
+        err_dict[f"Frame[{frame_it}]"][f"Collection: {collection}"] = {"Errors": [], 'members': {}, 'relations': {}}
+        comparison_dict[f"Frame[{frame_it}]"][f"Collection: {collection}"] = {}
         hits_new = frame_new.get(collection)
         hits_reference = frame_reference.get(collection)
         # Check for different number of hits
         if len(hits_new) != len(hits_reference):
-            err_dict[f"Frame[{i}]"][f"Collection: {collection}"]["Errors"].append(
+            err_dict[f"Frame[{frame_it}]"][f"Collection: {collection}"]["Errors"].append(
                 {"Number of hits differ": f"{len(hits_new)} vs {len(hits_reference)}"}
             )
         # Get members to compare for this collection
         members = get_collection_members(hits_new, members_dict)
         # Compare hits and collect statistics
-        lists_for_stats = compare_hits(hits_new, hits_reference, members, i, collection, err_dict, hit_counter)
+        lists_for_stats = compare_hits(hits_new, hits_reference, members, frame_it, collection, err_dict, hit_counter)
         # Store mean statistics for each member
         for member, values in lists_for_stats["continuous"].items():
-            comparison_dict[f"Frame[{i}]"][f"Collection: {collection}"][f"Continuous: {member}"] = np.mean(values) if values else None
+            comparison_dict[f"Frame[{frame_it}]"][f"Collection: {collection}"][f"Continuous: {member}"] = np.mean(values) if values else None
         for member, values in lists_for_stats["discrete"].items():
-            comparison_dict[f"Frame[{i}]"][f"Collection: {collection}"][f"Discrete: {member}"] = np.mean(values) if values else None
+            comparison_dict[f"Frame[{frame_it}]"][f"Collection: {collection}"][f"Discrete: {member}"] = np.mean(values) if values else None
         for member, values in lists_for_stats["vector"].items():
-            comparison_dict[f"Frame[{i}]"][f"Collection: {collection}"][f"Vector: {member}"] = np.mean(values) if values else None
+            comparison_dict[f"Frame[{frame_it}]"][f"Collection: {collection}"][f"Vector: {member}"] = np.mean(values) if values else None
 
 def gen_error_string(err_dict, verbosity="standard"):
     """
@@ -345,11 +345,11 @@ def main():
     comparison_dict = {}
     err_dict = {}
     # Loop over all events and compare
-    for i, frame_new in tqdm(enumerate(events_new), total=len(events_new)):
-        err_dict[f"Frame[{i}]"] = {"Errors": []}
-        comparison_dict[f"Frame[{i}]"] = {}
-        frame_reference = events_reference[i]
-        process_event(frame_new, frame_reference, members_dict, i, err_dict, comparison_dict, hit_counter)
+    for frame_it, frame_new in tqdm(enumerate(events_new), total=len(events_new)):
+        err_dict[f"Frame[{frame_it}]"] = {"Errors": []}
+        comparison_dict[f"Frame[{frame_it}]"] = {}
+        frame_reference = events_reference[frame_it]
+        process_event(frame_new, frame_reference, members_dict, frame_it, err_dict, comparison_dict, hit_counter)
     # Write summary to file
     verbosity = args.verbosity
     new_file_base = os.path.basename(args.new_file)
