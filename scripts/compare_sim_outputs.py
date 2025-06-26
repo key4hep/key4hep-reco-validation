@@ -3,6 +3,7 @@ from podio.root_io import Reader
 import numpy as np
 import os
 from tqdm import tqdm
+import sys
 
 # Dictionary defining which members to compare for each collection type
 members_dict = {
@@ -55,10 +56,13 @@ def parse_args():
     parser.add_argument("--new-file", default="output_new.edm4hep.root", help="New output file")
     parser.add_argument("--reference-file", default="output_ref.edm4hep.root", help="Reference output file")
 
+    parser.add_argument("-m", "--modified-output", action="store_true", help="Use modified output (default: False)")
+
     verbosity_group = parser.add_mutually_exclusive_group()
     verbosity_group.add_argument("-b", "--brief", action="store_const", dest="verbosity", const="brief", help="Brief output")
     verbosity_group.add_argument("-d", "--detailed", action="store_const", dest="verbosity", const="detailed", help="Detailed output")
     verbosity_group.add_argument("-s", "--standard", action="store_const", dest="verbosity", const="standard", help="Standard output")
+
     parser.set_defaults(verbosity="standard")
 
     return parser.parse_args()
@@ -68,8 +72,7 @@ def add_bad_hit(err_dict, frame, collection, member, hit_it, is_relation=False):
     Record the index of a hit that differs between new and reference files.
     """
     key = "relations" if is_relation else "members"
-    coll_dict = err_dict[f'Frame[{frame}]'][f'Collection: {collection}'][key].setdefault(member, {"bad_hits": []})
-    coll_dict["bad_hits"].append(hit_it)
+    err_dict[f'Frame[{frame}]'][f'Collection: {collection}'][key].setdefault(member, {"bad_hits": []})["bad_hits"].append(hit_it)
 
 def get_collection_members(collection, members_dict):
     """
@@ -139,22 +142,23 @@ def compare_relations(hit_new, hit_reference, relations_dict, frame_it, hit_it, 
         ref_relation = [elem.id().index for elem in getattr(hit_reference, f"get{relation}")()]
         if new_relation != ref_relation:
             add_bad_hit(err_dict, frame_it, collection, relation, hit_it, is_relation=True)
-            # print(f"Relation '{relation}' differs for hit {j} in collection {collection} of frame {i}")
-            # print(f"New: {new_relation}, Reference: {ref_relation}")
+            print(f"Relation '{relation}' differs for hit {hit_it} in collection {collection} of frame {frame_it}")
+            print(f"New: {new_relation}, Reference: {ref_relation}")
     for relation in relations['OneToOne']:
         hit_counter[0] += 1
         new_relation = getattr(hit_new, f"get{relation}")().id().index
         ref_relation = getattr(hit_reference, f"get{relation}")().id().index
         if new_relation != ref_relation:
             add_bad_hit(err_dict, frame_it, collection, relation, hit_it, is_relation=True)
-            # print(f"Relation '{relation}' differs for hit {j} in collection {collection} of frame {i}")
-            # print(f"New: {new_relation}, Reference: {ref_relation}")
+            print(f"Relation '{relation}' differs for hit {hit_it} in collection {collection} of frame {frame_it}")
+            print(f"New: {new_relation}, Reference: {ref_relation}")
 
 def compare_hits(hits_new, hits_reference, members, frame_it, collection, err_dict, hit_counter):
     """
     Compare hits between new and reference collections for all specified members.
     Returns statistics for each member.
     """
+    args = parse_args()
     lists_for_stats = {"continuous": {}, "discrete": {}, "vector": {}}
     # Initialize lists for statistics
     for member in members["continuous"]:
@@ -168,7 +172,8 @@ def compare_hits(hits_new, hits_reference, members, frame_it, collection, err_di
     for hit_it, (hit_new, hit_reference) in enumerate(zip(hits_new, hits_reference)):
         # Compare members of the hits
         lists_for_stats = compare_members(hit_new, hit_reference, frame_it, hit_it, collection, err_dict, lists_for_stats, hit_counter)
-        compare_relations(hit_new, hit_reference, relations_dict, frame_it, hit_it, collection, err_dict, hit_counter)
+        if not args.modified_output:
+            compare_relations(hit_new, hit_reference, relations_dict, frame_it, hit_it, collection, err_dict, hit_counter)
     return lists_for_stats
 
 
@@ -180,6 +185,12 @@ def process_event(frame_new, frame_reference, members_dict, frame_it, err_dict, 
     """
     reference_collections = frame_reference.getAvailableCollections()
     new_collections = frame_new.getAvailableCollections()
+    args = parse_args()
+    modified_colls = []
+    if args.modified_output:
+        # If modified output is used, find which collections have been modified
+        modified_colls = [c[:-9] for c in new_collections if c.endswith("_modified")]
+        new_collections = [c for c in new_collections if not c.endswith("_modified")]
     # Check for missing collections
     if len(reference_collections) != len(new_collections):
         missing_in_new = set(reference_collections) - set(new_collections)
@@ -201,7 +212,8 @@ def process_event(frame_new, frame_reference, members_dict, frame_it, err_dict, 
     for collection in common_collections:
         err_dict[f"Frame[{frame_it}]"][f"Collection: {collection}"] = {"Errors": [], 'members': {}, 'relations': {}}
         comparison_dict[f"Frame[{frame_it}]"][f"Collection: {collection}"] = {}
-        hits_new = frame_new.get(collection)
+        new_collection = collection + "_modified" if collection in modified_colls else collection
+        hits_new = frame_new.get(new_collection)
         hits_reference = frame_reference.get(collection)
         # Check for different number of hits
         if len(hits_new) != len(hits_reference):
@@ -330,6 +342,22 @@ def summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter):
                     summary.append(f"    {key}: {value}\n")
     return "".join(summary)
 
+def has_errors(err_dict):
+    for frame in err_dict.values():
+        if "Errors" in frame and frame["Errors"]:
+            return True
+        for collection in frame.values():
+            if isinstance(collection, dict):
+                if collection.get("Errors"):
+                    return True
+                for member_info in collection.get("members", {}).values():
+                    if member_info.get("bad_hits"):
+                        return True
+                for relation_info in collection.get("relations", {}).values():
+                    if relation_info.get("bad_hits"):
+                        return True
+    return False
+
 def main():
     """
     Main function: parses arguments, loads files, compares events, and writes summary.
@@ -358,6 +386,11 @@ def main():
     with open(summary_filename, "w") as f:
         f.write(summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter))
     print(f"Summary written to {summary_filename}")
+
+    # Exit with error code if any errors are present in err_dict
+    if has_errors(err_dict):
+        sys.exit(1)
+    
 
 if __name__ == "__main__":
     main()
