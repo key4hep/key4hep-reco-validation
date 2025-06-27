@@ -389,6 +389,7 @@ def main():
 
     # Exit with error code if any errors are present in err_dict
     if has_errors(err_dict):
+        print('error')
         sys.exit(1)
     
 
