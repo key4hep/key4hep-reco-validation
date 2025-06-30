@@ -38,7 +38,6 @@ set_test_env("run_ddsim")
 add_test(NAME "modify_ddsim_output"
   COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/output_editor.py --input-file sim.edm4hep.root --output-file modified_output.root
 )
-
 set_test_env("modify_ddsim_output")
 set_tests_properties("modify_ddsim_output" PROPERTIES DEPENDS "run_ddsim")
 
@@ -48,5 +47,5 @@ add_test(NAME "run_comparison"
 set_test_env("run_comparison")
 set_tests_properties("run_comparison" PROPERTIES
     DEPENDS "modify_ddsim_output"
-    PASS_REGULAR_EXPRESSION "error"
+    PASS_REGULAR_EXPRESSION "ComparisonError"
 )

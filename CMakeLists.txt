@@ -18,7 +18,7 @@ limitations under the License.
 ]]
 CMAKE_MINIMUM_REQUIRED(VERSION 3.15)
 
-project(k4FWCore LANGUAGES CXX)
+project(key4hep-reco-validation LANGUAGES CXX)
 
 set(${PROJECT_NAME}_VERSION_MAJOR 1)
 set(${PROJECT_NAME}_VERSION_MINOR 3)
@@ -26,11 +26,6 @@ set(${PROJECT_NAME}_VERSION_PATCH 0)
 
 set(${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}")
 
-find_package(ROOT COMPONENTS RIO Tree REQUIRED)
-find_package(Gaudi REQUIRED)  # TODO: Is this needed?
-find_package(podio 1.3 REQUIRED)
-find_package(EDM4HEP 0.99 REQUIRED)
-find_package(fmt REQUIRED)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
 include(CTest)

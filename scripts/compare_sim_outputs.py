@@ -282,7 +282,7 @@ def gen_error_string(err_dict, verbosity="standard"):
                                 error_string.append(f"    Relation '{relation}' bad hit indices: {relation_info['bad_hits']}")
     return "\n".join(error_string)
 
-def summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter):
+def summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter, modified):
     """
     Summarize the offsets (differences) between new and reference files.
     Includes per-collection and per-event statistics, as well as errors.
@@ -291,6 +291,7 @@ def summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter):
     summary.append("Summary of Offsets\n")
     summary.append("=" * 30 + "\n")
     summary.append(f"Verbosity level: {verbosity}\n")
+    summary.append(f"Artificially modified output: {'Yes' if modified else 'No'}\n")
     collection_stats = {}
     # Aggregate statistics across all events for each collection/member
     for frame_key, collections in comparison_dict.items():
@@ -384,12 +385,12 @@ def main():
     ref_file_base = os.path.basename(args.reference_file)
     summary_filename = f"summary_offsets_{new_file_base}_vs_{ref_file_base}.txt"
     with open(summary_filename, "w") as f:
-        f.write(summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter))
+        f.write(summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter, args.modified_output))
     print(f"Summary written to {summary_filename}")
 
     # Exit with error code if any errors are present in err_dict
     if has_errors(err_dict):
-        print('error')
+        print('ComparisonError')
         sys.exit(1)
     
 

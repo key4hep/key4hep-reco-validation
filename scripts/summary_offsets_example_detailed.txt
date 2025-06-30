@@ -1,0 +1,557 @@
+Summary of Offsets
+==============================
+Verbosity level: detailed
+Artificially modified output: Yes
+
+Total hits compared: 44417
+Total bad_hits: 1
+Ratio (bad_hits / total_hits): 2.2513902334691673e-05
+
+
+Errors found during comparison:
+
+Frame[1]:
+  Collection: MCParticles:
+    Member 'Mass' bad hit indices: [10]
+
+Averages across all events:
+YokeEndcapCollectionContributions:
+  Continuous: Energy: 0.0
+  Continuous: Time: 0.0
+  Discrete: PDG: 0.0
+  Vector: StepPosition: 0.0
+YokeEndcapCollection:
+  Continuous: Energy: 0.0
+  Discrete: CellID: 0.0
+  Vector: Position: 0.0
+VertexBarrelCollection:
+  Continuous: EDep: 0.0
+  Continuous: Time: 0.0
+  Continuous: PathLength: 0.0
+  Discrete: CellID: 0.0
+  Discrete: Quality: 0.0
+  Vector: Position: 0.0
+  Vector: Momentum: 0.0
+OuterTrackerBarrelCollection:
+  Continuous: EDep: 0.0
+  Continuous: Time: 0.0
+  Continuous: PathLength: 0.0
+  Discrete: CellID: 0.0
+  Discrete: Quality: 0.0
+  Vector: Position: 0.0
+  Vector: Momentum: 0.0
+YokeBarrelCollectionContributions:
+  Continuous: Energy: 0.0
+  Continuous: Time: 0.0
+  Discrete: PDG: 0.0
+  Vector: StepPosition: 0.0
+VertexEndcapCollection:
+  Continuous: EDep: 0.0
+  Continuous: Time: 0.0
+  Continuous: PathLength: 0.0
+  Discrete: CellID: 0.0
+  Discrete: Quality: 0.0
+  Vector: Position: 0.0
+  Vector: Momentum: 0.0
+LumiCalCollection:
+  Continuous: Energy: 0.0
+  Discrete: CellID: 0.0
+  Vector: Position: 0.0
+ECalBarrelCollection:
+  Continuous: Energy: 0.0
+  Discrete: CellID: 0.0
+  Vector: Position: 0.0
+YokeBarrelCollection:
+  Continuous: Energy: 0.0
+  Discrete: CellID: 0.0
+  Vector: Position: 0.0
+OuterTrackerEndcapCollection:
+  Continuous: EDep: 0.0
+  Continuous: Time: 0.0
+  Continuous: PathLength: 0.0
+  Discrete: CellID: 0.0
+  Discrete: Quality: 0.0
+  Vector: Position: 0.0
+  Vector: Momentum: 0.0
+HCalRingCollection:
+  Continuous: Energy: 0.0
+  Discrete: CellID: 0.0
+  Vector: Position: 0.0
+HCalRingCollectionContributions:
+  Continuous: Energy: 0.0
+  Continuous: Time: 0.0
+  Discrete: PDG: 0.0
+  Vector: StepPosition: 0.0
+MCParticles:
+  Continuous: Charge: 0.0
+  Continuous: Mass: 0.0006218905472636816
+  Continuous: Time: 0.0
+  Discrete: PDG: 0.0
+  Discrete: GeneratorStatus: 0.0
+  Discrete: SimulatorStatus: 0.0
+  Vector: Momentum: 0.0
+  Vector: Vertex: 0.0
+  Vector: Endpoint: 0.0
+  Vector: MomentumAtEndpoint: 0.0
+  Vector: Spin: 0.0
+ECalBarrelCollectionContributions:
+  Continuous: Energy: 0.0
+  Continuous: Time: 0.0
+  Discrete: PDG: 0.0
+  Vector: StepPosition: 0.0
+EventHeader:
+ECalEndcapCollectionContributions:
+  Continuous: Energy: 0.0
+  Continuous: Time: 0.0
+  Discrete: PDG: 0.0
+  Vector: StepPosition: 0.0
+HCalBarrelCollectionContributions:
+  Continuous: Energy: 0.0
+  Continuous: Time: 0.0
+  Discrete: PDG: 0.0
+  Vector: StepPosition: 0.0
+LumiCalCollectionContributions:
+  Continuous: Energy: 0.0
+  Continuous: Time: 0.0
+  Discrete: PDG: 0.0
+  Vector: StepPosition: 0.0
+ECalEndcapCollection:
+  Continuous: Energy: 0.0
+  Discrete: CellID: 0.0
+  Vector: Position: 0.0
+HCalBarrelCollection:
+  Continuous: Energy: 0.0
+  Discrete: CellID: 0.0
+  Vector: Position: 0.0
+InnerTrackerBarrelCollection:
+  Continuous: EDep: 0.0
+  Continuous: Time: 0.0
+  Continuous: PathLength: 0.0
+  Discrete: CellID: 0.0
+  Discrete: Quality: 0.0
+  Vector: Position: 0.0
+  Vector: Momentum: 0.0
+HCalEndcapCollection:
+  Continuous: Energy: 0.0
+  Discrete: CellID: 0.0
+  Vector: Position: 0.0
+HCalEndcapCollectionContributions:
+  Continuous: Energy: 0.0
+  Continuous: Time: 0.0
+  Discrete: PDG: 0.0
+  Vector: StepPosition: 0.0
+InnerTrackerEndcapCollection:
+  Continuous: EDep: 0.0
+  Continuous: Time: 0.0
+  Continuous: PathLength: 0.0
+  Discrete: CellID: 0.0
+  Discrete: Quality: 0.0
+  Vector: Position: 0.0
+  Vector: Momentum: 0.0
+
+Per-event statistics:
+
+Frame[0]:
+  Collection: YokeEndcapCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: YokeEndcapCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: VertexBarrelCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: OuterTrackerBarrelCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: YokeBarrelCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: VertexEndcapCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: LumiCalCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: ECalBarrelCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: YokeBarrelCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: OuterTrackerEndcapCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: HCalRingCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: HCalRingCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: MCParticles:
+    Continuous: Charge: 0.0
+    Continuous: Mass: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Discrete: GeneratorStatus: 0.0
+    Discrete: SimulatorStatus: 0.0
+    Vector: Momentum: 0.0
+    Vector: Vertex: 0.0
+    Vector: Endpoint: 0.0
+    Vector: MomentumAtEndpoint: 0.0
+    Vector: Spin: 0.0
+  Collection: ECalBarrelCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: EventHeader:
+  Collection: ECalEndcapCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: HCalBarrelCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: LumiCalCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: ECalEndcapCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: HCalBarrelCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: InnerTrackerBarrelCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: HCalEndcapCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: HCalEndcapCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: InnerTrackerEndcapCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+
+Frame[1]:
+  Collection: YokeEndcapCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: YokeEndcapCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: VertexBarrelCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: OuterTrackerBarrelCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: YokeBarrelCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: VertexEndcapCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: LumiCalCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: ECalBarrelCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: YokeBarrelCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: OuterTrackerEndcapCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: HCalRingCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: HCalRingCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: MCParticles:
+    Continuous: Charge: 0.0
+    Continuous: Mass: 0.0018656716417910447
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Discrete: GeneratorStatus: 0.0
+    Discrete: SimulatorStatus: 0.0
+    Vector: Momentum: 0.0
+    Vector: Vertex: 0.0
+    Vector: Endpoint: 0.0
+    Vector: MomentumAtEndpoint: 0.0
+    Vector: Spin: 0.0
+  Collection: ECalBarrelCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: EventHeader:
+  Collection: ECalEndcapCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: HCalBarrelCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: LumiCalCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: ECalEndcapCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: HCalBarrelCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: InnerTrackerBarrelCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: HCalEndcapCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: HCalEndcapCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: InnerTrackerEndcapCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+
+Frame[2]:
+  Collection: YokeEndcapCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: YokeEndcapCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: VertexBarrelCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: OuterTrackerBarrelCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: YokeBarrelCollectionContributions:
+    Continuous: Energy: None
+    Continuous: Time: None
+    Discrete: PDG: None
+    Vector: StepPosition: None
+  Collection: VertexEndcapCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: LumiCalCollection:
+    Continuous: Energy: None
+    Discrete: CellID: None
+    Vector: Position: None
+  Collection: ECalBarrelCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: YokeBarrelCollection:
+    Continuous: Energy: None
+    Discrete: CellID: None
+    Vector: Position: None
+  Collection: OuterTrackerEndcapCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: HCalRingCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: HCalRingCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: MCParticles:
+    Continuous: Charge: 0.0
+    Continuous: Mass: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Discrete: GeneratorStatus: 0.0
+    Discrete: SimulatorStatus: 0.0
+    Vector: Momentum: 0.0
+    Vector: Vertex: 0.0
+    Vector: Endpoint: 0.0
+    Vector: MomentumAtEndpoint: 0.0
+    Vector: Spin: 0.0
+  Collection: ECalBarrelCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: EventHeader:
+  Collection: ECalEndcapCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: HCalBarrelCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: LumiCalCollectionContributions:
+    Continuous: Energy: None
+    Continuous: Time: None
+    Discrete: PDG: None
+    Vector: StepPosition: None
+  Collection: ECalEndcapCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: HCalBarrelCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: InnerTrackerBarrelCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
+  Collection: HCalEndcapCollection:
+    Continuous: Energy: 0.0
+    Discrete: CellID: 0.0
+    Vector: Position: 0.0
+  Collection: HCalEndcapCollectionContributions:
+    Continuous: Energy: 0.0
+    Continuous: Time: 0.0
+    Discrete: PDG: 0.0
+    Vector: StepPosition: 0.0
+  Collection: InnerTrackerEndcapCollection:
+    Continuous: EDep: 0.0
+    Continuous: Time: 0.0
+    Continuous: PathLength: 0.0
+    Discrete: CellID: 0.0
+    Discrete: Quality: 0.0
+    Vector: Position: 0.0
+    Vector: Momentum: 0.0
