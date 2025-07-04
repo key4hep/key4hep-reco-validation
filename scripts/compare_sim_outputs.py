@@ -55,6 +55,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Compare hits from new and reference files")
     parser.add_argument("--new-file", default="output_new.edm4hep.root", help="New output file")
     parser.add_argument("--reference-file", default="output_ref.edm4hep.root", help="Reference output file")
+    parser.add_argument("--output-file", default=None, help="Output file")
 
     parser.add_argument("-m", "--modified-output", action="store_true", help="Use modified output (default: False)")
 
@@ -383,7 +384,10 @@ def main():
     verbosity = args.verbosity
     new_file_base = os.path.basename(args.new_file)
     ref_file_base = os.path.basename(args.reference_file)
-    summary_filename = f"summary_offsets_{new_file_base}_vs_{ref_file_base}.txt"
+    if args.output_file != None:
+        summary_filename = args.output_file
+    else:
+        summary_filename = f"summary_offsets_{new_file_base}_vs_{ref_file_base}.txt"
     with open(summary_filename, "w") as f:
         f.write(summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter, args.modified_output))
     print(f"Summary written to {summary_filename}")
@@ -391,7 +395,7 @@ def main():
     # Exit with error code if any errors are present in err_dict
     if has_errors(err_dict):
         print('ComparisonError')
-        sys.exit(1)
+        sys.exit(2)
     
 
 if __name__ == "__main__":
