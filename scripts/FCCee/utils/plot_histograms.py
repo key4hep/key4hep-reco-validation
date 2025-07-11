@@ -32,9 +32,9 @@ def recursive_search(target_dir, dict):
             target_dir.cd()
 
 
-def plot_histo(h, h_ref, match):
+def plot_histo(h, h_ref, match, n_dir, n_histo):
 
-    c1 = ROOT.TCanvas("c1", "Canvas", 800, 600)
+    c1 = ROOT.TCanvas(f"c_{n_dir}_{n_histo}", "Canvas", 800, 600)
     pad = c1.GetPad(0)
 
     # Draw current histogram
@@ -119,7 +119,7 @@ def compare_and_plot(args):
 
     # Plot histograms
     # loop over all directories inside file
-    for dir in file_struct:
+    for n_dir, dir in enumerate(file_struct):
         print(dir)
         if dir != "":
             inputDir = inputFile.Get(dir)
@@ -136,7 +136,7 @@ def compare_and_plot(args):
 
         # loop over all histos inside directory
         failed_match = []
-        for h_name in file_struct[dir]:
+        for n_histo, h_name in enumerate(file_struct[dir]):
 
             histo = inputDir.Get(h_name)
             histo_ref = None
@@ -154,7 +154,7 @@ def compare_and_plot(args):
             if not match:
                 failed_match.append(h_name)
             # plot the two histograms
-            leg, c = plot_histo(histo, histo_ref, match)
+            leg, c = plot_histo(histo, histo_ref, match, n_dir, n_histo)
             leg.Draw()
             c.Update()
 
