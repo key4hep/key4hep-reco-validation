@@ -143,16 +143,16 @@ def compare_relations(hit_new, hit_reference, relations_dict, frame_it, hit_it, 
         ref_relation = [elem.id().index for elem in getattr(hit_reference, f"get{relation}")()]
         if new_relation != ref_relation:
             add_bad_hit(err_dict, frame_it, collection, relation, hit_it, is_relation=True)
-            print(f"Relation '{relation}' differs for hit {hit_it} in collection {collection} of frame {frame_it}")
-            print(f"New: {new_relation}, Reference: {ref_relation}")
+            # print(f"Relation '{relation}' differs for hit {hit_it} in collection {collection} of frame {frame_it}")
+            # print(f"New: {new_relation}, Reference: {ref_relation}")
     for relation in relations['OneToOne']:
         hit_counter[0] += 1
         new_relation = getattr(hit_new, f"get{relation}")().id().index
         ref_relation = getattr(hit_reference, f"get{relation}")().id().index
         if new_relation != ref_relation:
             add_bad_hit(err_dict, frame_it, collection, relation, hit_it, is_relation=True)
-            print(f"Relation '{relation}' differs for hit {hit_it} in collection {collection} of frame {frame_it}")
-            print(f"New: {new_relation}, Reference: {ref_relation}")
+            # print(f"Relation '{relation}' differs for hit {hit_it} in collection {collection} of frame {frame_it}")
+            # print(f"New: {new_relation}, Reference: {ref_relation}")
 
 def compare_hits(hits_new, hits_reference, members, frame_it, collection, err_dict, hit_counter):
     """
