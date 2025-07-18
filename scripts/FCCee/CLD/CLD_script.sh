@@ -34,7 +34,7 @@ cd "${WORKAREA}/${GEOMETRY}/${VERSION}"
 echo "ANALYSIS PHASE:"
 
 echo "Starting analysis script..."
-python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/CLD/CLD_o3_v01/ARC_make_hists.py" \
+python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/CLD/ARC_make_hists.py" \
        -f ARC_sim.root -o results.root \
        -c "${K4GEO_PATH}/test/compact/ARC_standalone_o1_v01.xml"
 echo "Analysis execution finished"
