@@ -1,4 +1,5 @@
 import argparse
+from datetime import datetime
 from podio.root_io import Reader
 import numpy as np
 import os
@@ -93,13 +94,12 @@ def get_relation_members(hit, relations_dict):
             return relations
     return {'OneToMany': [], 'OneToOne': []}
 
-def compare_members(hit_new, hit_reference, frame_it, hit_it, collection, err_dict, lists_for_stats, hit_counter):
+def compare_members(hit_new, hit_reference, frame_it, hit_it, collection, err_dict, lists_for_stats):
     # Compare continuous members (e.g., energies)
     members = get_collection_members(hit_new, members_dict)
     new_getters = {member: getattr(hit_new, f'get{member}') for member in members["continuous"]}
     ref_getters = {member: getattr(hit_reference, f'get{member}') for member in members["continuous"]}
     for member in members["continuous"]:
-        hit_counter[frame_it] += 1
         new_val = new_getters[member]()
         ref_val = ref_getters[member]()
         if new_val != ref_val:
@@ -109,7 +109,6 @@ def compare_members(hit_new, hit_reference, frame_it, hit_it, collection, err_di
         )
     # Compare discrete members (e.g., IDs)
     for member in members["discrete"]:
-        hit_counter[frame_it] += 1
         if getattr(hit_new, f'get{member}')() != getattr(hit_reference, f'get{member}')():
             lists_for_stats["discrete"][member].append(100)  # 100% difference
             add_bad_hit(err_dict, frame_it, collection, member, hit_it)
@@ -117,7 +116,6 @@ def compare_members(hit_new, hit_reference, frame_it, hit_it, collection, err_di
             lists_for_stats["discrete"][member].append(0)
     # Compare 3-vector members (e.g., positions, momenta)
     for member in members["vector"]:
-        hit_counter[frame_it] += 1
         vec_new = getattr(hit_new, f'get{member}')()
         vec_ref = getattr(hit_reference, f'get{member}')()
         disp_x = vec_new.x - vec_ref.x
@@ -131,14 +129,13 @@ def compare_members(hit_new, hit_reference, frame_it, hit_it, collection, err_di
         lists_for_stats["vector"][member].append(rel_disp_err)
     return lists_for_stats
 
-def compare_relations(hit_new, hit_reference, relations_dict, frame_it, hit_it, collection, err_dict, hit_counter):
+def compare_relations(hit_new, hit_reference, relations_dict, frame_it, hit_it, collection, err_dict):
     """
     Compare relations between hits in new and reference collections.
     Records errors if relations differ.
     """
     relations = get_relation_members(hit_new, relations_dict)
     for relation in relations['OneToMany']:
-        hit_counter[frame_it] += 1
         new_relation = [elem.id().index for elem in getattr(hit_new, f"get{relation}")()]
         ref_relation = [elem.id().index for elem in getattr(hit_reference, f"get{relation}")()]
         if new_relation != ref_relation:
@@ -146,7 +143,6 @@ def compare_relations(hit_new, hit_reference, relations_dict, frame_it, hit_it, 
             # print(f"Relation '{relation}' differs for hit {hit_it} in collection {collection} of frame {frame_it}")
             # print(f"New: {new_relation}, Reference: {ref_relation}")
     for relation in relations['OneToOne']:
-        hit_counter[frame_it] += 1
         new_relation = getattr(hit_new, f"get{relation}")().id().index
         ref_relation = getattr(hit_reference, f"get{relation}")().id().index
         if new_relation != ref_relation:
@@ -171,10 +167,11 @@ def compare_hits(hits_new, hits_reference, members, frame_it, collection, err_di
 
     # Compare each hit in the collections
     for hit_it, (hit_new, hit_reference) in enumerate(zip(hits_new, hits_reference)):
+        hit_counter[frame_it][collection] += 1
         # Compare members of the hits
-        lists_for_stats = compare_members(hit_new, hit_reference, frame_it, hit_it, collection, err_dict, lists_for_stats, hit_counter)
+        lists_for_stats = compare_members(hit_new, hit_reference, frame_it, hit_it, collection, err_dict, lists_for_stats)
         if not args.modified_output:
-            compare_relations(hit_new, hit_reference, relations_dict, frame_it, hit_it, collection, err_dict, hit_counter)
+            compare_relations(hit_new, hit_reference, relations_dict, frame_it, hit_it, collection, err_dict)
     return lists_for_stats
 
 
@@ -211,6 +208,7 @@ def process_event(frame_new, frame_reference, members_dict, frame_it, err_dict, 
     # Only compare collections present in both files
     common_collections = [c for c in reference_collections if c in new_collections]
     for collection in common_collections:
+        hit_counter[frame_it][collection] = 0
         err_dict[f"Frame[{frame_it}]"][f"Collection: {collection}"] = {"Errors": [], 'members': {}, 'relations': {}}
         comparison_dict[f"Frame[{frame_it}]"][f"Collection: {collection}"] = {}
         new_collection = collection + "_modified" if collection in modified_colls else collection
@@ -233,14 +231,15 @@ def process_event(frame_new, frame_reference, members_dict, frame_it, err_dict, 
         for member, values in lists_for_stats["vector"].items():
             comparison_dict[f"Frame[{frame_it}]"][f"Collection: {collection}"][f"Vector: {member}"] = np.mean(values) if values else None
 
-def gen_error_string(err_dict, verbosity="standard"):
+def gen_error_string(err_dict, bad_hit_indices, hit_counter, verbosity="standard"):
     """
     Generate a human-readable string summarizing all errors found during comparison.
+    Also prints total bad hits, total hits, and their ratio for each frame and collection using bad_hit_indices.
     """
     error_string = []
     error_string.append("\nError summary")
-    error_string.append("-" * len("Error summary") + "\n")
-    for frame, frame_errors in err_dict.items():
+    error_string.append("-" * len("Error summary"))
+    for frame_it, (frame, frame_errors) in enumerate(err_dict.items()):
         frame_has_errors = False
         if "Errors" in frame_errors and frame_errors["Errors"]:
             frame_has_errors = True
@@ -263,13 +262,20 @@ def gen_error_string(err_dict, verbosity="standard"):
                 collections_with_errors.append(collection_key)
                 frame_has_errors = True
         if frame_has_errors:
-            error_string.append(f"{frame}:")
+            error_string.append(f"\n{frame}:")
             if "Errors" in frame_errors and frame_errors["Errors"]:
                 for err in frame_errors["Errors"]:
                     error_string.append(f"  General error: {err}")
             for collection_key in collections_with_errors:
                 collection_errors = frame_errors[collection_key]
                 error_string.append(f"  {collection_key}:")
+                # Calculate bad hits for this frame and collection using bad_hit_indices
+                bad_hits = set()
+                key = f"{frame_it}_{collection_key}"
+                if key in bad_hit_indices:
+                    bad_hits = bad_hit_indices[key]
+                n_bad_hits = len(bad_hits)
+                error_string.append(f"    Total bad hits: {n_bad_hits} out of {hit_counter[frame_it][collection_key[12:]]} hits. Ratio: {n_bad_hits / hit_counter[frame_it][collection_key[12:]] if hit_counter[frame_it][collection_key[12:]] else 0:.2f} ")
                 if "Errors" in collection_errors and collection_errors["Errors"]:
                     for err in collection_errors["Errors"]:
                         error_string.append(f"    Error: {err}")
@@ -281,19 +287,23 @@ def gen_error_string(err_dict, verbosity="standard"):
                     if "relations" in collection_errors:
                         for relation, relation_info in collection_errors["relations"].items():
                             if "bad_hits" in relation_info and relation_info["bad_hits"]:
-                                error_string.append(f"    Relation '{relation}' bad hit indices: {relation_info['bad_hits']}")
+                                error_string.append(f"    Relation '{relation}' bad hit indices: {relation_info['bad_hits']}\n")
     return "\n".join(error_string)
 
-def summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter, modified):
+def summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter, args):
     """
     Summarize the offsets (differences) between new and reference files.
     Includes per-collection and per-event statistics, as well as errors.
     """
+
     summary = []
-    summary.append("Summary of Offsets\n")
-    summary.append("=" * 30 + "\n")
+    first_line = f"Summary of Offsets        Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+    summary.append(first_line)
+    summary.append("=" * len(first_line) + "\n")
+    summary.append(f"New file: {os.path.basename(args.new_file)}\n")
+    summary.append(f"Reference file: {os.path.basename(args.reference_file)}\n")
     summary.append(f"Verbosity level: {verbosity}\n")
-    summary.append(f"Artificially modified output: {'Yes' if modified else 'No'}\n")
+    summary.append(f"Artificially modified output: {'Yes' if args.modified_output else 'No'}\n")
     comparison_dict_agg = {}
     # Aggregate statistics across all events for each collection/member
     for frame_key, collections in comparison_dict.items():
@@ -307,19 +317,24 @@ def summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter, modifie
                     comparison_dict_agg[collection_key][key].append(value)
 
     # Count total bad_hits and total hits (overall)
-    total_bad_hits = 0
-    for frame in err_dict.values():
-        for collection in frame.values():
+    bad_hit_indices = {}
+    for frame_it, frame in enumerate(err_dict.values()):
+        for name, collection in frame.items():
+            bad_hit_indices[f"{frame_it}_{name}"] = set()
             if isinstance(collection, dict):
                 # Count bad_hits in members
                 for member_info in collection.get("members", {}).values():
-                    total_bad_hits += len(member_info.get("bad_hits", []))
+                    bad_hit_indices[f"{frame_it}_{name}"].update(member_info.get("bad_hits", []))
                 # Count bad_hits in relations
                 for relation_info in collection.get("relations", {}).values():
-                    total_bad_hits += len(relation_info.get("bad_hits", []))
-    summary.append(f"\nTotal hits compared: {sum(hit_counter.values())}\n")
-    summary.append(f"Total bad_hits: {total_bad_hits}\n")
-    summary.append(f"Ratio (bad_hits / total_hits): {total_bad_hits / sum(hit_counter.values()) if sum(hit_counter.values()) else 0}\n")
+                    bad_hit_indices[f"{frame_it}_{name}"].update(relation_info.get("bad_hits", []))
+        bad_hit_indices[f'n_bad_hits_frame_{frame_it}'] = sum([len(vals) for name, vals in bad_hit_indices.items() if name.startswith(f"{frame_it}_")])
+    bad_hit_indices['n_bad_hits_total'] = sum([vals for name, vals in bad_hit_indices.items() if name.startswith('n_bad_hits_frame_')])
+
+    tot_hits = sum([sum(hit_counter[frame_it].values()) for frame_it in hit_counter])        
+    summary.append(f"\nTotal hits compared: {tot_hits}\n")
+    summary.append(f"Total bad_hits: {bad_hit_indices['n_bad_hits_total']}\n")
+    summary.append(f"Ratio (bad_hits / total_hits): {bad_hit_indices['n_bad_hits_total'] / tot_hits if tot_hits else 0}\n")
     summary.append("(A bad hit is defined as a hit where one or more of the member properties differ for members or where the IDs differ for relations)\n\n")
 
     # If detailed, print per-frame stats
@@ -327,16 +342,8 @@ def summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter, modifie
         summary.append("\nPer-frame bad hit statistics:\n")
         summary.append("-" * len("Per-frame bad hit statistics:") + "\n")
         for n, (frame_key, frame) in enumerate(err_dict.items()):
-            frame_bad_hits = 0
-            # Find corresponding hit count for this frame
-            # We don't track per-frame hit counts, so estimate by summing bad_hits and using hit_counter[0] as total
-            for collection in frame.values():
-                if isinstance(collection, dict):
-                    for member_info in collection.get("members", {}).values():
-                        frame_bad_hits += len(member_info.get("bad_hits", []))
-                    for relation_info in collection.get("relations", {}).values():
-                        frame_bad_hits += len(relation_info.get("bad_hits", []))
-            summary.append(f"{frame_key}: total_hits = {hit_counter[n]}, bad_hits = {frame_bad_hits}, ratio = {frame_bad_hits / hit_counter[n] if hit_counter[n] else 0}\n")
+            tot_hits_frame = sum(hit_counter[n].values())
+            summary.append(f"{frame_key}: total_hits = {tot_hits_frame}, bad_hits = {bad_hit_indices[f'n_bad_hits_frame_{n}']}, ratio = {bad_hit_indices[f'n_bad_hits_frame_{n}'] / tot_hits_frame if tot_hits_frame else 0}\n")
 
     # Add average statistics for each collection/member
     if verbosity != "brief":
@@ -355,7 +362,7 @@ def summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter, modifie
                 summary.append(f"  {key}: {avg}\n")
 
     # Add error summary
-    summary.append(gen_error_string(err_dict, verbosity) + "\n")
+    summary.append(gen_error_string(err_dict, bad_hit_indices, hit_counter, verbosity) + "\n")
 
     # Add per-event statistics
     if verbosity == "detailed":
@@ -401,7 +408,7 @@ def main():
     err_dict = {}
     # Loop over all events and compare
     for frame_it, frame_new in tqdm(enumerate(events_new), total=len(events_new)):
-        hit_counter[frame_it] = 0
+        hit_counter[frame_it] = {}
         err_dict[f"Frame[{frame_it}]"] = {"Errors": []}
         comparison_dict[f"Frame[{frame_it}]"] = {}
         frame_reference = events_reference[frame_it]
@@ -415,7 +422,7 @@ def main():
     else:
         summary_filename = f"summary_offsets_{new_file_base}_vs_{ref_file_base}.txt"
     with open(summary_filename, "w") as f:
-        f.write(summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter, args.modified_output))
+        f.write(summarize_offsets(comparison_dict, err_dict, verbosity, hit_counter, args))
     print(f"Summary written to {summary_filename}")
 
     # Exit with error code if any errors are present in err_dict
