@@ -18,6 +18,6 @@ source "${FCCCONFIG}/share/FCC-config/FullSim/IDEA/${VERSION}/ctest_sim_digi_rec
 echo "ANALYSIS PHASE:"
 
 echo "Starting analysis script..."
-python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/IDEA/${VERSION}/IDEA_make_hists.py" \
+python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/IDEA/IDEA_make_hists.py" \
        -f IDEA_sim_digi_reco.root -o results.root
 echo "Script executed successfully"
