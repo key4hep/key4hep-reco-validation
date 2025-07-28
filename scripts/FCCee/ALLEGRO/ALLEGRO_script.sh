@@ -11,13 +11,13 @@ echo "SETUP PHASE:"
 echo "SIM-DIGI-RECO PHASE:"
 
 echo "Starting script..."
-bash "${FCCCONFIG}/share/FCC-config/FullSim/ALLEGRO/ALLEGRO_o1_v03/ctest_sim_digi_reco.sh"
+bash "${FCCCONFIG}/share/FCC-config/FullSim/ALLEGRO/${VERSION}/ctest_sim_digi_reco.sh"
 
 
 # analyze simulation file
 echo "ANALYSIS PHASE:"
 
 echo "Starting analysis script..."
-python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/ALLEGRO/ALLEGRO_o1_v03/ALLEGRO_make_hists.py" \
+python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/ALLEGRO/ALLEGRO_make_hists.py" \
        -f ALLEGRO_sim_digi_reco.root -o results.root
 echo "Script executed successfully"
