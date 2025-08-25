@@ -11,7 +11,7 @@ echo "SETUP PHASE:"
 echo "SIM-DIGI-RECO PHASE:"
 
 echo "Starting script..."
-source "${FCCCONFIG}/share/FCC-config/FullSim/IDEA/${VERSION}/ctest_sim_digi_reco.sh"
+source "${FCCCONFIG}/FullSim/IDEA/${VERSION}/ctest_sim_digi_reco.sh"
 
 
 # analyze simulation file
