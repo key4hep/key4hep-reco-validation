@@ -10,8 +10,8 @@ import sys
 members_dict = {
     "MCParticle": {
         "continuous": ["Charge", "Mass", "Time"],
-        "discrete": ["PDG", "GeneratorStatus", "SimulatorStatus"],
-        "vector": ["Momentum", "Vertex", "Endpoint", "MomentumAtEndpoint", "Spin"],
+        "discrete": ["PDG", "GeneratorStatus", "SimulatorStatus", "Helicity"],
+        "vector": ["Momentum", "Vertex", "Endpoint", "MomentumAtEndpoint"],
     },
     "CaloHitContribution": {
         "continuous": ["Energy", "Time"],
