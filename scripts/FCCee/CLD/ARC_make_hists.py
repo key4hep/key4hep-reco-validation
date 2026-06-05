@@ -69,7 +69,7 @@ def make_hists_file(args):
         theta_1stHit = mom.Theta()
 
         for arc_hit in event.get("ArcCollection"):
-            particle = arc_hit.getMCParticle()
+            particle = arc_hit.getParticle()
             pdgID = particle.getPDG()
             if pdgID in (22, -22):
                 n_ph += 1
