@@ -20,13 +20,6 @@ def make_hist_file(args):
 
     dir_ECalBarrel = outputFile.mkdir("ECalBarrel")
 
-    hist_ccE = ROOT.TH1F(
-        "h_CaloCluster_E",
-        "CaloCluster Energy;Energy [MeV];Counts / 0.15 MeV",
-        100,
-        0,
-        15,
-    )
     hist_ctcE = ROOT.TH1F(
         "h_CaloTopoCluster_E",
         "CaloTopoCluster Energy;Energy [MeV];Counts / 0.15 MeV",
@@ -67,7 +60,6 @@ def make_hist_file(args):
     dir_list.append(dir_ECalBarrel)
     histo_list.append(
         [
-            hist_ccE,
             hist_ctcE,
             hist_ecal_totE,
             hist_ecal_posX,
@@ -78,9 +70,6 @@ def make_hist_file(args):
 
     # Loop over dataset
     for event in podio_reader.get("events"):
-
-        for calo in event.get("CaloClusters"):
-            hist_ccE.Fill(calo.getEnergy())
 
         for calo in event.get("CaloTopoClusters"):
             hist_ctcE.Fill(calo.energy())
