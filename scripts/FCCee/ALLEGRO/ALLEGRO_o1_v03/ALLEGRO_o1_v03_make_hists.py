@@ -87,10 +87,10 @@ def make_hist_file(args):
 
         energy = 0
         for ecal in event.get("ECalBarrelModuleThetaMergedPositioned"):
-            energy += ecal.energy()
-            hist_ecal_posX.Fill(ecal.position().x)
-            hist_ecal_posY.Fill(ecal.position().y)
-            hist_ecal_posZ.Fill(ecal.position().z)
+            energy += ecal.getEnergy()
+            hist_ecal_posX.Fill(ecal.getPosition().x)
+            hist_ecal_posY.Fill(ecal.getPosition().y)
+            hist_ecal_posZ.Fill(ecal.getPosition().z)
         hist_ecal_totE.Fill(energy)
 
     # normalize if desired
