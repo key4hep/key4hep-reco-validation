@@ -79,10 +79,10 @@ def make_hist_file(args):
     # Loop over dataset
     for event in podio_reader.get("events"):
 
-        for calo in event.get("CaloClustersCells"):
+        for calo in event.get("CaloClusterCells"):
             hist_ccE.Fill(calo.getEnergy())
 
-        for calo in event.get("CaloTopoClustersCells"):
+        for calo in event.get("CaloTopoClusterCells"):
             hist_ctcE.Fill(calo.energy())
 
         energy = 0
