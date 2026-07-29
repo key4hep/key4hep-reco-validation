@@ -1,23 +1,37 @@
-# enable exit on error to check correct script execution from within pipeline
-set -e
+#!/bin/bash
 
-# setup phase
-echo "SETUP PHASE:"
+# Enable strict error tracking for production/pipeline safety
+set -euo pipefail
 
-[ -z "${KEY4HEP_STACK}" ] && source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+# --- Argument Parsing ---
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --particle)
+            PARTICLE="$2"; shift 2 ;;
+        --energy)
+            ENERGY="$2"; shift 2 ;;
+        --inputFile)
+            INPUT_FILE="$2"; shift 2 ;;
+        --outputFile)
+            OUTPUT_FILE="$2"; shift 2 ;;
+        --nEvents)
+            N_EVENTS="$2"; shift 2 ;;
+        --seed)
+            RANDOM_SEED="$2"; shift 2 ;;
+        *)
+            echo "Error: Unknown option $1"
+            print_usage ;;
+    esac
+done
 
+# --- Setup ---
+if [ -z "${KEY4HEP_STACK:-}" ]; then
+    source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+fi
 
-# simulation phase
-echo "SIM-DIGI-RECO PHASE:"
-
-echo "Starting script..."
-bash "${FCCCONFIG}/FullSim/ALLEGRO/${VERSION}/ctest_sim_digi_reco.sh"
-
-
-# analyze simulation file
-echo "ANALYSIS PHASE:"
-
-echo "Starting analysis script..."
-python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/ALLEGRO/ALLEGRO_o1_v03/ALLEGRO_o1_v03_make_hists.py" \
-       -f ALLEGRO_sim_digi_reco.root -o results.root
-echo "Script executed successfully"
+source "${FCCCONFIG}/FullSim/ALLEGRO/${VERSION}/ctest_sim_digi_reco.sh" \
+    --nEvents "${N_EVENTS}" \
+    --particle "${PARTICLE}" \
+    --energy "${ENERGY}" \
+    --outputFile "${OUTPUT_FILE}" \
+    --seed "${RANDOM_SEED}"
