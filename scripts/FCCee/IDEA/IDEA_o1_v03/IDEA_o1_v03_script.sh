@@ -1,23 +1,15 @@
-# enable exit on error to check correct script execution from within pipeline
-set -e
+#!/bin/bash
 
-# setup phase
-echo "SETUP PHASE:"
+# --- Setup Environment ---
+if [ -z "${KEY4HEP_STACK:-}" ]; then
+    source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+fi
 
-[ -z "$KEY4HEP_STACK" ] && source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+# Enable strict error tracking for production/pipeline safety
+set -euo pipefail
 
+# Define the path to the ctest script
+CTEST_SCRIPT="${WORKAREA}/FCC-config/FCCee/FullSim/IDEA/${VERSION}/ctest_sim_digi_reco.sh"
 
-# simulation phase
-echo "SIM-DIGI-RECO PHASE:"
-
-echo "Starting script..."
-source "${FCCCONFIG}/FullSim/IDEA/${VERSION}/ctest_sim_digi_reco.sh"
-
-
-# analyze simulation file
-echo "ANALYSIS PHASE:"
-
-echo "Starting analysis script..."
-python "${WORKAREA}/key4hep-reco-validation/scripts/FCCee/IDEA/IDEA_o1_v03/IDEA_o1_v03_make_hists.py" \
-       -f IDEA_sim_digi_reco.root -o results.root
-echo "Script executed successfully"
+# --- Forward Arguments ---
+source "$CTEST_SCRIPT" "$@"
