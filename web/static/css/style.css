@@ -2,17 +2,19 @@
     /* Primary Brand Colors */
     --color-deep-blue: #0F124A;
     --color-radiant-blue: #0000FF;
-    --color-energy: #903DFD;
-    --color-space: #BEE6F3;
-    --color-earth: #9C826D;
     --color-flash: #EDFD5D;
+
+    /* Secondary Brand Colors (Used Sparsely) */
+    --color-space: #BEE6F3;
+    --color-energy: #903DFD;
+    --color-earth: #9C826D;
     --color-eco: #778700;
 
-    /* Interface System Mappings */
+    /* Interface System Mappings - Core Focus on Deep Blue, Radiant Blue, & Flash */
     --bg-page: #FFFFFF;
     --bg-card: #FFFFFF;
     --text-dark: var(--color-deep-blue);
-    --text-muted: var(--color-earth);
+    --text-muted: var(--color-radiant-blue);
     --border-light: var(--color-space);
 
     /* Typography Stack */
@@ -140,7 +142,7 @@ body {
     padding: 2.5rem 2rem;
     border-radius: 12px;
     margin-bottom: 2rem;
-    border: 1px solid var(--color-space);
+    border: 1px solid var(--color-radiant-blue);
 }
 
 .hero-banner h1 {
@@ -218,7 +220,7 @@ body {
     top: 1rem;
     z-index: 90;
     background-color: var(--color-deep-blue);
-    border: 1px solid var(--color-space);
+    border: 1px solid var(--color-radiant-blue);
     padding: 0.65rem 1.25rem;
     margin-bottom: 2rem;
     border-radius: 8px;
@@ -269,12 +271,12 @@ body {
 .toc-pill-algo {
     background-color: transparent;
     color: var(--color-space);
-    border: 1px solid var(--color-space);
+    border: 1px solid var(--color-radiant-blue);
 }
 
 .toc-pill-algo:hover {
-    background-color: var(--color-space);
-    color: var(--color-deep-blue);
+    background-color: var(--color-radiant-blue);
+    color: white;
 }
 
 /* Grouping Hierarchy Sections */
@@ -302,7 +304,7 @@ body {
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--text-muted);
+    color: var(--color-radiant-blue);
 }
 
 .algorithm-block {
@@ -311,7 +313,7 @@ body {
 }
 
 .algorithm-header {
-    color: var(--color-energy);
+    color: var(--color-radiant-blue);
     font-size: 1.2rem;
     margin-bottom: 1rem;
     display: flex;
@@ -323,7 +325,7 @@ body {
 }
 
 .module-header {
-    color: var(--color-earth);
+    color: var(--color-deep-blue);
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -331,7 +333,7 @@ body {
 }
 
 .section-anchor {
-    color: var(--color-space);
+    color: var(--color-radiant-blue);
     text-decoration: none;
     font-size: 0.8em;
     margin-left: 0.5rem;
@@ -340,7 +342,7 @@ body {
 
 .subdetector-header:hover .section-anchor,
 .algorithm-header:hover .section-anchor {
-    color: var(--color-radiant-blue);
+    color: var(--color-flash);
 }
 
 /* Plot Grid & Cards */
