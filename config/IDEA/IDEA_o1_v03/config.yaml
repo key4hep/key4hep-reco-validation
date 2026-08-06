@@ -1,0 +1,144 @@
+detector: "IDEA"
+version: "IDEA_o1_v03"
+
+geometry:
+  bitfield: "system:5,superlayer:5,layer:4,nphi:11,stereosign:-2"
+  max_pseudorapidity: 0.88
+  total_drift_chamber_layers: 112
+  magnetic_field_tesla: 2.0
+
+collections:
+  mc_particles: "MCParticles"
+  track_collections:
+    - "FittedTracks"
+    - "FittedTracksWithFilteredHits"
+  vtx_barrel_digis: "VTXBDigis"
+  vtx_endcap_digis: "VTXDDigis"
+  siwr_barrel_digis: "SiWrBDigis"
+  siwr_endcap_digis: "SiWrDDigis"
+  drift_chamber_digis: "DCHDigis"
+  drift_chamber_dndx: "DCHdNdxCollection"
+  muon_tracker_hits: "MSTrackerHits"
+  track_mc_association: "TracksFromGenParticlesAssociation"
+  calo_cherenkov: "DRcaloSiPMreadoutDigiHit"
+  calo_scintillation: "DRcaloSiPMreadoutDigiHit_scint"
+  topoclusters: "TopoClusterAll"
+
+# List of histograms specific to IDEA validation
+plots:
+  - key: "vtx_digi_hits_per_event"
+    title: "Vertex Detector Hits per Event"
+    type: "asymmetric"
+    x_title: "Vertex Detector Hits per Event"
+    subdetector: "vertex"
+    algorithm: "silicon_pixel"
+    module_type: "barrel_endcap"
+
+  - key: "siwr_digi_hits_per_event"
+    title: "Silicon Wrapper Hits per Event"
+    type: "asymmetric"
+    x_title: "Silicon Wrapper Hits per Event"
+    subdetector: "tracking"
+    algorithm: "silicon_wrapper"
+    module_type: "barrel_endcap"
+
+  - key: "drift_chamber_hits_per_layer"
+    title: "DCH Hits per Layer"
+    type: "integer"
+    x_title: "Number of Hits in Layer"
+    subdetector: "tracking"
+    algorithm: "drift_chamber"
+    module_type: "barrel"
+
+  - key: "dch_dn_dx"
+    title: "Drift Chamber dN/dx Distribution"
+    type: "asymmetric"
+    x_title: "DCH dN/dx [hits/cm]"
+    subdetector: "tracking"
+    algorithm: "drift_chamber"
+    module_type: "barrel"
+
+  - key: "calorimeter_linearity_cherenkov"
+    title: "Cherenkov Linearity [E_{reco}/E_{true}]"
+    type: "symmetric"
+    x_title: "E_{reco} / E_{true}"
+    subdetector: "calorimetry"
+    algorithm: "dual_readout"
+    module_type: "cherenkov"
+
+  - key: "calorimeter_linearity_scintillation"
+    title: "Scintillation Linearity [E_{reco}/E_{true}]"
+    type: "symmetric"
+    x_title: "E_{reco} / E_{true}"
+    subdetector: "calorimetry"
+    algorithm: "dual_readout"
+    module_type: "scintillation"
+
+  - key: "calorimeter_c_over_s_ratio"
+    title: "Dual-Readout Energy Ratio (E_{Cherenkov} / E_{Scintillation})"
+    type: "symmetric"
+    x_title: "E_{Cherenkov} / E_{Scintillation}"
+    subdetector: "calorimetry"
+    algorithm: "dual_readout"
+    module_type: "combined"
+
+  - key: "topocluster_count"
+    title: "TopoCluster Multiplicity"
+    type: "integer"
+    x_title: "Number of TopoClusters per Event"
+    subdetector: "calorimetry"
+    algorithm: "topocluster"
+    module_type: "global"
+
+  - key: "topocluster_leading_energy"
+    title: "Highest Cluster Energy Profile"
+    type: "asymmetric"
+    x_title: "Highest Cluster Energy per Event [GeV]"
+    subdetector: "calorimetry"
+    algorithm: "topocluster"
+    module_type: "global"
+
+  - key: "muon_system_hits_per_event"
+    title: "Muon System Hits per Event"
+    type: "integer"
+    x_title: "Muon System Hits per Event"
+    subdetector: "muon_system"
+    algorithm: "muon_chambers"
+    module_type: "barrel_endcap"
+
+  # Dynamic entries per tracking collection
+  - key: "tracker_hits_per_track"
+    title: "Tracker Hits per Track"
+    type: "asymmetric"
+    per_collection: true
+    x_title: "Number of Tracker Hits per Track"
+    subdetector: "tracking"
+    algorithm: "track_reconstruction"
+    module_type: "global"
+
+  - key: "reconstructed_tracks_per_event"
+    title: "Reconstructed Tracks per Event"
+    type: "integer"
+    per_collection: true
+    x_title: "Reconstructed Tracks per Event"
+    subdetector: "tracking"
+    algorithm: "track_reconstruction"
+    module_type: "global"
+
+  - key: "track_fit_chi2_over_ndf"
+    title: "Track Fit Quality #chi^{2}/ndf"
+    type: "asymmetric"
+    per_collection: true
+    x_title: "#chi^{2} / ndf"
+    subdetector: "tracking"
+    algorithm: "track_reconstruction"
+    module_type: "global"
+
+  - key: "momentum_resolution"
+    title: "Momentum Resolution #Delta p/p_{true}"
+    type: "symmetric"
+    per_collection: true
+    x_title: "(p_{reco} - p_{true}) / p_{true}"
+    subdetector: "tracking"
+    algorithm: "track_reconstruction"
+    module_type: "global"

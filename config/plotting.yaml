@@ -1,0 +1,29 @@
+style:
+    canvas_color: 0
+    pad_color: 0
+    opt_stat: 0
+    opt_title: 0
+    margin_top: 0.10
+    margin_bottom: 0.14
+    margin_left: 0.16
+    margin_right: 0.06
+    font_type: 42
+    label_size: 0.045
+    title_size: 0.055
+    line_width: 3
+
+canvas_dimensions: [800, 600]
+
+sample_styles:
+    electron:
+        label: "Electron (e^{-})"
+        color: "#903DFF"
+        style: 1
+    muon:
+        label: "Muon (#mu^{-})"
+        color: "#778700"
+        style: 2
+    reference:
+        label: "Reference"
+        color: "#0F124A"
+        style: 0
